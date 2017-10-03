@@ -1,6 +1,5 @@
 package fr.lala.expeditor.services;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import fr.lala.expeditor.dao.EmployeeDao;
@@ -33,31 +32,31 @@ public class EmployeeService implements ICrudServices<Employee>{
 	}
 
 	@Override
-	public void insert(Employee data) throws SQLException {
+	public void insert(Employee data) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(Employee data) throws SQLException {
+	public void update(Employee data) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(Employee data) throws SQLException {
+	public void delete(Employee data) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<Employee> selectAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Employee> selectAll() throws Exception {
+		List<Employee> result = employeedao.selectAll();
+		return result;
 	}
 
 	@Override
-	public Employee selectById(int id) throws SQLException {
+	public Employee selectById(int id) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

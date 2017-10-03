@@ -24,7 +24,7 @@
     <servlet-name>ConnectServlet</servlet-name>
     <url-pattern>/connexion</url-pattern>
   </servlet-mapping>
-  <filter>
+<!--   <filter>
     <display-name>ConnectionFilter</display-name>
     <filter-name>ConnectionFilter</filter-name>
     <filter-class>fr.lala.expeditor.filters.ConnectionFilter</filter-class>
@@ -32,5 +32,15 @@
   <filter-mapping>
     <filter-name>ConnectionFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping> -->
+  <servlet>
+    <description>Servlet d'affichage de la liste des employés</description>
+    <display-name>ListEmployeesServlet</display-name>
+    <servlet-name>ListEmployeesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ListEmployeesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListEmployeesServlet</servlet-name>
+    <url-pattern>/ListEmployeesServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

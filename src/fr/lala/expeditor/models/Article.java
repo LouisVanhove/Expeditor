@@ -36,12 +36,13 @@ public class Article implements Serializable{
 	 * @param description
 	 * @param weight
 	 */
-	public Article(int id, String label, String description, int weight) {
+	public Article(int id, String label, String description, int weight, int quantity) {
 		super();
 		this.setId(id);
 		this.setLabel(label);
 		this.setDescription(description);
 		this.setWeight(weight);
+		//this.setQuantity(quantity);
 	}
 
 	public int getId() {
@@ -95,8 +96,10 @@ public class Article implements Serializable{
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Article [id=").append(id).append(", label=").append(label).append(", description=")
-				.append(description).append(", weight=").append(weight).append("]");
+		builder.append("Article [id=").append(id).append(", désignation=").append(label).append(", description=")
+				.append(description).append(", poids=").append(weight)
+				.append(", quantité=")//.append(quantity)
+				.append("]");
 		return builder.toString();
 	}
 }
