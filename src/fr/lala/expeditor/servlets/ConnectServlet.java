@@ -81,7 +81,7 @@ public class ConnectServlet extends HttpServlet {
 					request.getSession().setAttribute("User", user);
 				
 					if(user.getProfile()==Profile.MANAGER){ 
-						redirection = "/WEB-INF/manager/suivicommande.jsp";	
+						redirection = "/WEB-INF/jsp/manager/suivicommande.jsp";	
 					}
 					else if(user.getProfile()==Profile.SHIPPING_CLERK){
 						redirection = "/WEB-INF/jsp/employee/commande.jsp";	

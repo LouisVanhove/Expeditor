@@ -46,7 +46,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ListEmployeesServlet</servlet-name>
-    <url-pattern>/ListEmployeesServlet</url-pattern>
+    <url-pattern>/manager/ListEmployees</url-pattern>
   </servlet-mapping>
 
 </web-app>
