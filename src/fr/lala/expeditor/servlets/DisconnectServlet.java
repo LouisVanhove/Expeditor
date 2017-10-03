@@ -30,11 +30,10 @@ public class DisconnectServlet extends HttpServlet {
 			/* Recuperation et destruction de la session en cours */
 	        HttpSession session = request.getSession();
 	        session.invalidate();
-	        redirection =  "/";		
+	        redirection =  "/connexion";		
 		} catch(Exception e){	
 		      e.printStackTrace();
 		}
-
 		/* Affichage de la page de connexion */
 	   this.getServletContext().getRequestDispatcher(redirection).forward( request, response );	
 	}

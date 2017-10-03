@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>Expeditor</display-name>
   <welcome-file-list>
-    <welcome-file>jsp/connection.jsp</welcome-file>
+    <welcome-file>connexion</welcome-file>
   </welcome-file-list>
   <servlet>
     <description></description>
@@ -14,6 +14,7 @@
     <servlet-name>DisconnectServlet</servlet-name>
     <url-pattern>/deconnexion</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>ConnectServlet</display-name>
@@ -24,6 +25,8 @@
     <servlet-name>ConnectServlet</servlet-name>
     <url-pattern>/connexion</url-pattern>
   </servlet-mapping>
+  
+  
   <filter>
     <display-name>ConnectionFilter</display-name>
     <filter-name>ConnectionFilter</filter-name>
@@ -31,6 +34,7 @@
   </filter>
   <filter-mapping>
     <filter-name>ConnectionFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/manager/*</url-pattern>
+    <url-pattern>/employee/*</url-pattern>
   </filter-mapping>
 </web-app>
