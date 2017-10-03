@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.lala.expeditor.dao.EmployeeDao;
 import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.utils.HashageSalagePassword;
 
 /**
  * Classe Service de Employé
@@ -26,10 +27,13 @@ public class EmployeeService implements ICrudServices<Employee>{
 		Employee employee = null;
 		try {
 			employee = employeedao.selectByLogin(login, password);
+			String passwordCrypte = HashageSalagePassword.encryptPassword(password);
+			employee = employeedao.selectByLogin(login, passwordCrypte);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return employee;
+		
 	}
 
 	@Override
