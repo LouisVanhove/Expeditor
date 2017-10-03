@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe représentant l'entité Article.
+ * Classe reprÃ©sentant l'entitÃ© Article.
  * @author adelaune2017
  *
  */
@@ -24,7 +24,7 @@ public class Article implements Serializable{
 	private List<Order> listOrders = new ArrayList<>();
 
 	/**
-	 * Constructeur par défaut.
+	 * Constructeur par dï¿½faut.
 	 */
 	public Article() {
 		super();
