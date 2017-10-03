@@ -6,7 +6,10 @@ import java.io.IOException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -71,7 +74,27 @@ public class PDFUtils {
      * @param canvas
      */
     private static void setOrderInfo(int numFacture, PdfContentByte canvas) {
-    	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+numFacture), 50, 670, 0);		
+    	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+numFacture), 50, 670, 0);	
+    	
+    	BarcodeEAN codeEAN = new BarcodeEAN();
+    	codeEAN.setCodeType(Barcode.EAN13);
+    	codeEAN.setCode("9780201615883");
+    	Image imageEAN = codeEAN.createImageWithBarcode(canvas, null, null);
+    	imageEAN.setWidthPercentage(5);
+    	imageEAN.setAbsolutePosition(350, 670);
+    	try {
+			document.add(imageEAN);
+		} catch (DocumentException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+              
+            try {
+				document.add(imageEAN);
+			} catch (DocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
     
     /**
