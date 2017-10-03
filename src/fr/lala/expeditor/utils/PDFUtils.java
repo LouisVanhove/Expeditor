@@ -19,12 +19,12 @@ import fr.lala.expeditor.models.Order;
 
 public class PDFUtils {
 	static Document document ;
-	
+	private static final String pdfRepo ="/WEB-INF/pdf/";
 
 	
-    public static void createPdf(String dest, Order order) throws IOException, DocumentException {
+    public static void createPdf(Order order) throws IOException, DocumentException {
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfRepo+"cmd"+order.getId()+".pdf"));
         document.open();
         PdfContentByte canvas = writer.getDirectContent();
         
