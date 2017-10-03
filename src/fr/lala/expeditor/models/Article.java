@@ -19,6 +19,7 @@ public class Article implements Serializable{
 	private String label;
 	private String description;
 	private int weight;
+	private int quantity;
 	private boolean archived;
 	private List<Order> listOrders = new ArrayList<>();
 
@@ -74,6 +75,14 @@ public class Article implements Serializable{
 
 	public void setWeight(int weight) {
 		this.weight = weight;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public boolean isArchived() {
