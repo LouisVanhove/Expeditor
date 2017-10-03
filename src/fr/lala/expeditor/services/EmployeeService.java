@@ -2,6 +2,7 @@ package fr.lala.expeditor.services;
 
 import fr.lala.expeditor.dao.EmployeeDao;
 import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.utils.HashageSalagePassword;
 
 /**
  * Classe Service de Employé
@@ -18,15 +19,17 @@ public class EmployeeService {
 	 * @param password
 	 * @return
 	 */
-	public Employee selectById(String login, String password){
+	public Employee selectByLogin(String login, String password){
 		
 		Employee employee = null;
 		try {
-			employee = employeedao.selectById(login, password);
+			String passwordCrypte = HashageSalagePassword.encryptPassword(password);
+			employee = employeedao.selectByLogin(login, passwordCrypte);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return employee;
+		
 	}
 
 }

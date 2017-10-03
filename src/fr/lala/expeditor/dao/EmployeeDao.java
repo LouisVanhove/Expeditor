@@ -32,7 +32,7 @@ public class EmployeeDao {
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
-	public Employee selectById(String login, String password){
+	public Employee selectByLogin(String login, String password){
 		Employee employee = null;
 
 		try (Connection cnx = ConnectionPool.getConnection()) {
@@ -60,7 +60,7 @@ public class EmployeeDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	private Employee itemBuilder(ResultSet rs) throws SQLException {
+	public Employee itemBuilder(ResultSet rs) throws SQLException {
 		Employee employee = new Employee();
 		employee.setId(rs.getInt(COLUMN_ID));
 		employee.setLogin(rs.getString(COLUMN_LOGIN));

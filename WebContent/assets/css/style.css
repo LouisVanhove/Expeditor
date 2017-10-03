@@ -10,15 +10,22 @@ html, body {
 	font-family: 'open_sansregular';
 }
 
+
+/*retour des erreurs*/
+.message{
+	color:red;
+}
+
+/*section*/
+.section{
+	min-height:400px;
+}
+
 /* footer */
 footer {
 	padding: 10px 0;
 	background-color: #000000;
-}
-
-#copyright {
-	min-height: 10%;
-	position: absolute;
+	color: white;
 	bottom: 0;
 	text-align: left;
 	color: white;
