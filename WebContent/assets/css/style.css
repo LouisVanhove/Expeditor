@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+
+html, body {
+	background: #ffffff;
+	width: 100%;
+	padding: 0;
+	/* pour éviter les marges */
+	margin-left: 0;
+	margin-right: 0;
+	font-family: 'open_sansregular';
+}
+
+/* footer */
+footer {
+	padding: 10px 0;
+	background-color: #000000;
+}
+
+#copyright {
+	min-height: 10%;
+	position: absolute;
+	bottom: 0;
+	text-align: left;
+	color: white;
+	font-size: 12px;
+}
