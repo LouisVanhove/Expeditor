@@ -1,6 +1,7 @@
 package fr.lala.expeditor.services;
 
 import fr.lala.expeditor.dao.EmployeeDao;
+import fr.lala.expeditor.models.Employee;
 
 /**
  * Classe Service de Employé

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.services.EmployeeService;
 
 /**
@@ -65,10 +66,10 @@ public class ConnectServlet extends HttpServlet {
 			
 			request.getSession().setAttribute("User", user);
 		
-			if(user instanceof Manager){ 
+			if(user.getProfile().equals("MANAGER")){ 
 				redirection = "/WEB-INF/manager/suivicommande.jsp";	
 			}
-			else if(user instanceof Employee){
+			else if(user.getProfile().equals("SHIPPING_CLERK")){
 				redirection = "/WEB-INF/jsp/employee/commande.jsp";	
 			} else {
 				request.getSession().setAttribute("message", " Ce compte n'existe pas");

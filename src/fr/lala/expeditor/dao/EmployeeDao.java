@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.utils.MonLogger;
 
 /**
@@ -42,12 +44,6 @@ public class EmployeeDao {
 
 			// si le resultset nous retourne true
 			if (rs.next()) {
-				if (rs.getInt(COLUMN_PROFILE) == 1) {
-					employee = new Employee(); // si statut est 1 alors l'objet est un Employe
-				}
-				if (rs.getInt(COLUMN_PROFILE) == 2) {
-					employee = new Manager(); // si statut est 2 alors l'objet est un Manager
-				}
 				// Ajout d'un utilisateur
 				employee = itemBuilder(rs);
 			}
@@ -58,15 +54,37 @@ public class EmployeeDao {
 		return employee;
 	}
 
-	private Employee itemBuilder(ResultSet rs) {
+	/**
+	 * Méthode en charge de récupérer un employé
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private Employee itemBuilder(ResultSet rs) throws SQLException {
 		Employee employee = new Employee();
 		employee.setId(rs.getInt(COLUMN_ID));
 		employee.setLogin(rs.getString(COLUMN_LOGIN));
 		employee.setPassword(rs.getString(COLUMN_PASSWORD));
-		employee.setName(rs.getString(COLUMN_NAME));
+		employee.setLastName(rs.getString(COLUMN_NAME));
 		employee.setFirstName(rs.getString(COLUMN_FIRSTNAME));
-		employee.setProfile(rs.getString(COLUMN_PROFILE));
-		employee.setArchived(rs.getString(COLUMN_ARCHIVED));
+		employee.setProfile(profileBuilder(rs.getInt(COLUMN_PROFILE)));
+		employee.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
 		return employee;
+	}
+
+	/**
+	 * Méthode en charge de récupérer le profil de l'employé
+	 * @param id_profile
+	 * @return
+	 */
+	private Profile profileBuilder(int id_profile) {
+		Profile profile = null;
+		if(1==id_profile){
+			 profile = Profile.MANAGER;
+		}
+		else if (2==id_profile){
+			profile = Profile.SHIPPING_CLERK;
+		}
+		return profile;
 	}
 }
