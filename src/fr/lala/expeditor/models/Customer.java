@@ -18,6 +18,7 @@ public class Customer implements Serializable {
 
 	private int id;
 	private String name;
+	private String address;
 	private String zipCode;
 	private String city;
 	private boolean archived;
@@ -59,6 +60,14 @@ public class Customer implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getZipCode() {
