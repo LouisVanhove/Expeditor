@@ -59,7 +59,7 @@ public class ConnectServlet extends HttpServlet {
 			try {
 				validateLogin(login);
 				validatePassword(password);
-				user = employeeservice.selectById(login, password); 
+				user = employeeservice.selectByLogin(login, password); 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

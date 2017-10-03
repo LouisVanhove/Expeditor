@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import fr.lala.expeditor.models.Employee;
@@ -15,7 +16,7 @@ import fr.lala.expeditor.utils.MonLogger;
  * @author aurelie.lardeux2017
  *
  */
-public class EmployeeDao {
+public class EmployeeDao implements ICrudDao<Employee>{
 	
 	private static final String COLUMN_ID = "Id";
 	private static final String COLUMN_LOGIN = "login";
@@ -32,7 +33,37 @@ public class EmployeeDao {
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
-	public Employee selectById(String login, String password){
+	@Override
+	public void insert(Employee data) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Employee data) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Employee data) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Employee selectById(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<Employee> selectAll() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Employee selectByLogin(String login, String password){
 		Employee employee = null;
 
 		try (Connection cnx = ConnectionPool.getConnection()) {
@@ -60,7 +91,8 @@ public class EmployeeDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	private Employee itemBuilder(ResultSet rs) throws SQLException {
+	@Override
+	public Employee itemBuilder(ResultSet rs) throws SQLException {
 		Employee employee = new Employee();
 		employee.setId(rs.getInt(COLUMN_ID));
 		employee.setLogin(rs.getString(COLUMN_LOGIN));
