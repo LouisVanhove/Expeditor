@@ -37,4 +37,16 @@
     <url-pattern>/manager/*</url-pattern>
     <url-pattern>/employee/*</url-pattern>
   </filter-mapping>
+
+  <servlet>
+    <description>Servlet d'affichage de la liste des employés</description>
+    <display-name>ListEmployeesServlet</display-name>
+    <servlet-name>ListEmployeesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ListEmployeesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListEmployeesServlet</servlet-name>
+    <url-pattern>/manager/ListEmployees</url-pattern>
+  </servlet-mapping>
+
 </web-app>

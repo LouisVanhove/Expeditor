@@ -21,7 +21,7 @@ public class Article implements Serializable{
 	private int weight;
 	private int quantity;
 	private boolean archived;
-	private List<Order> listOrders = new ArrayList<>();
+	//private List<Order> listOrders = new ArrayList<>();
 
 	/**
 	 * Constructeur par d�faut.
@@ -37,12 +37,13 @@ public class Article implements Serializable{
 	 * @param description
 	 * @param weight
 	 */
-	public Article(int id, String label, String description, int weight) {
+	public Article(int id, String label, String description, int weight, int quantity) {
 		super();
 		this.setId(id);
 		this.setLabel(label);
 		this.setDescription(description);
 		this.setWeight(weight);
+		this.setQuantity(quantity);
 	}
 
 	public int getId() {
@@ -93,19 +94,20 @@ public class Article implements Serializable{
 		this.archived = archived;
 	}
 
-	public List<Order> getListOrders() {
+/*	public List<Order> getListOrders() {
 		return listOrders;
 	}
 
 	public void setListOrders(List<Order> listOrders) {
 		this.listOrders = listOrders;
-	}
+	}*/
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Article [id=").append(id).append(", label=").append(label).append(", description=")
-				.append(description).append(", weight=").append(weight).append("]");
+		builder.append("Article [id=").append(id).append(", désignation=").append(label).append(", description=")
+				.append(description).append(", poids=").append(weight)
+				.append(", quantité=").append(quantity).append("]");
 		return builder.toString();
 	}
 }
