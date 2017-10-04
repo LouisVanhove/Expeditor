@@ -84,7 +84,7 @@ public class ConnectServlet extends HttpServlet {
 						redirection = "/WEB-INF/jsp/manager/suivicommande.jsp";	
 					}
 					else if(user.getProfile()==Profile.SHIPPING_CLERK){
-						redirection = "/WEB-INF/jsp/employee/commande.jsp";	
+						redirection = "/employee/Commande";	
 					} 
 			}else {
 					request.getSession().setAttribute("message", " Ce compte n'existe pas");

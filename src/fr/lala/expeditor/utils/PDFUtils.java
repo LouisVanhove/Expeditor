@@ -6,10 +6,7 @@ import java.io.IOException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.Barcode;
-import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -22,12 +19,15 @@ import fr.lala.expeditor.models.Order;
 
 public class PDFUtils {
 	static Document document ;
-	private static final String pdfRepo ="/WEB-INF/pdf/";
+	
 
 	
-    public static void createDeliveryNote(Order order) throws IOException, DocumentException {
+    public static String createDeliveryNote(Order order, String realPath) throws IOException, DocumentException {
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfRepo+"order"+order.getId()+".pdf"));
+        String nomFichier = "order"+order.getId()+".pdf" ;
+        String path = realPath+nomFichier ;
+        System.out.println("Chemin absolu sur le serveur : "+path);
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
         PdfContentByte canvas = writer.getDirectContent();
         
@@ -37,6 +37,7 @@ public class PDFUtils {
         setOrderDetail(order, canvas);
 
         document.close();
+        return nomFichier ;
     }
     
 	/**
@@ -60,12 +61,12 @@ public class PDFUtils {
     	int x = 420 ;
     	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("DESTINATAIRE"), x, i, 0);
 		i = i-20;
-    	
-    		ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(customer.getName()), x, i, 0);
-    		i = i-20;
-    		ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(customer.getAddress()), x, i, 0);
-    		i = i-20;
-    		ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(customer.getZipCode() + " " + customer.getCity()), x, i, 0);
+	
+		ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(customer.getName()), x, i, 0);
+		i = i-20;
+		ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(customer.getAddress()), x, i, 0);
+		i = i-20;
+		ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(customer.getZipCode() + " " + customer.getCity()), x, i, 0);
     }
     
     /**
@@ -75,7 +76,7 @@ public class PDFUtils {
      */
     private static void setOrderInfo(Order order, PdfContentByte canvas) {
     	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+order.getId()), 50, 670, 0);	
-    	
+    	/*
     	BarcodeEAN codeEAN = new BarcodeEAN();
     	codeEAN.setCodeType(Barcode.EAN13);
     	codeEAN.setCode(sixDigitsOrderNumber(order));
@@ -95,6 +96,7 @@ public class PDFUtils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			*/
 	}
     
 

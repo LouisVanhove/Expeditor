@@ -2,19 +2,18 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:import url="/WEB-INF/fragments/header.jsp"/>
-
-<!-- debut section -->
-	<section id="page_connexion" class="section">
-		<div class="container">
-			
-			<div class="row">
-				<div class="col-separator col-xs-12 col-sm-6">
-						<h4>Commande</h4>
-				</div><!-- fin -
-			</div><!-- fin row -->
-			
-		</div><!-- fin container --> 
-	</section><!-- fin section -->
+	<br>
+	<br>${sessionScope.currentOrder.id }
+	<br>${sessionScope.currentOrder.customer }
+	<br>${sessionScope.currentOrder.orderDate }
+	<br>${sessionScope.currentOrder.employee.lastName }
+	<br>${sessionScope.currentOrder.employee.firstName }
+	<br>${sessionScope.currentOrder.customer.name }
+	<br>${sessionScope.currentOrder.state}
+	<br>${sessionScope.currentOrder.archived }
+	<c:forEach var="article" items="${sessionScope.currentOrder.listArticles}">
+		${article.label}<br>
+	</c:forEach>
 
 
 
