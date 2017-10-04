@@ -19,7 +19,7 @@ public class ListArticlesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private RequestDispatcher dispatcher = null;
 	private List<Article> listarticles=null;
-	public static final String VIEW = "/WEB-INF/manager/listearticles.jsp";
+	public static final String VIEW = "/WEB-INF/jsp/manager/listearticles.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()

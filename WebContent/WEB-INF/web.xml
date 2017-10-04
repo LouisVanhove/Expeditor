@@ -44,4 +44,24 @@
     <servlet-name>ListArticlesServlet</servlet-name>
     <url-pattern>/manager/listarticles</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Servlet d'affichage de la liste des employés</description>
+    <display-name>ListEmployeesServlet</display-name>
+    <servlet-name>ListEmployeesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ListEmployeesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListEmployeesServlet</servlet-name>
+    <url-pattern>/manager/ListEmployees</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ManageArticlesServlet</display-name>
+    <servlet-name>ManageArticlesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ManageArticlesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageArticlesServlet</servlet-name>
+    <url-pattern>/manager/gererarticles</url-pattern>
+  </servlet-mapping>
 </web-app>

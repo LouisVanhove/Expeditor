@@ -108,8 +108,9 @@ public class Employee implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Employee [id=").append(id).append(", login=").append(login).append(", password=")
-				.append(password).append(", lastName=").append(lastName).append(", firstName=").append(firstName)
+		builder.append("Employee [login=").append(login)
+				.append(", lastName=").append(lastName)
+				.append(", firstName=").append(firstName)
 				.append(", profile=").append(profile).append("]");
 		return builder.toString();
 	}	

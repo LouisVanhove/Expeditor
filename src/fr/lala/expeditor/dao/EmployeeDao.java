@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,10 +27,14 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	private static final String COLUMN_PROFILE = "profile";
 	private static final String COLUMN_ARCHIVED = "archived";
 	
-	private static final String SELECT_EMPLOYE_BY = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived "
+	private static final String SELECT_EMPLOYE_BY = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
 			+ " FROM EMPLOYEES e" 
 			+ " WHERE e.login=? AND e.password=? AND e.archived=0" ;
 	
+	private static final String SELECT_ALL_EMPLOYEES = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
+			+ " FROM EMPLOYEES e"
+			+ " WHERE e.archived=0";
+
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
@@ -70,12 +75,25 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	}
 	
 	/**
-	 * Méthode de sélection de tous les employés  en base.
+	 * Méthode retournant la liste des employés (préparateurs de commande et manager) 
+	 * travaillant dans l'entreprise (archived = 0).
+	 * @return liste d'employés actifs.
 	 */
 	@Override
 	public List<Employee> selectAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Employee> result = new ArrayList<>();
+		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement cmd = cnx.prepareStatement(SELECT_ALL_EMPLOYEES);
+			
+			ResultSet rs = cmd.executeQuery();
+			while (rs.next()){
+				result.add(itemBuilder(rs));
+			}
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return result;
 	}
 
 	/**

@@ -2,16 +2,17 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:import url="/WEB-INF/fragments/header.jsp"/>
+<c:import url="/WEB-INF/fragments/menumanager.jsp" />
 
 <!-- debut section -->
-	<section id="page_connexion" class="section">
+	<section id="page_articles" class="section">
 		<div class="container">
 			
 			<div class="row">
 				<div class="col-sm-12 col-xs-12">
-					<h2>Liste des articles</h2>
+					<h3>Liste des articles</h3>
 					
-					<form action="${pageContext.request.contextPath}/utilisateur/gestionenfant" method="post">
+					<form action="${pageContext.request.contextPath}/manager/gererarticles" method="post">
 					<div class=" add-task-row">
 						<!-- Bouton ajouter -->
 						<input type="submit" class="btn btn-md btn-primary" name="ajouter"
@@ -21,7 +22,7 @@
 
 					<div class="panel-body">
 						<c:forEach var="article" items="${listearticles}">
-							<form action="${pageContext.request.contextPath}/utilisateur/gestionenfant" method="post">
+							<form action="${pageContext.request.contextPath}/manager/gererarticles" method="post">
 
 							<div class="task-content">
 								<ul class="list-group">

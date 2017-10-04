@@ -9,25 +9,24 @@
 <body>
 
 	
-		<!-- Navigation -->
-   		 <nav class="navbar navbar-default navbar-fixed-top" id="mainNav">
-      		<div class="container">
-      			<div class="navbar-header">
-      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle Navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-       		 		<a class="navbar-brand" href="/"><h2>EXPEDITOR</h2> <h5>- Gestion de préparation de commandes</h5></a>
-       		 	</div>
-        		<div class="navbar-collapse collapse">
-           			<ul class="nav navbar-nav navbar-right">
-            			<li >${employee.name}</li>
-            			<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
-          			</ul>
-        		</div>
-      		</div>
-    	</nav> 
 
+<!-- Header -->
+<header>
+    <div class="bandeau-nav">
+    	<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
+        
+        <div id="logo">
+        	<a href="/connexion"><h4>EXPEDITOR - Gestion de préparation de commandes</h4></a>
+        </div>
+        
+        <nav id="menu">
+        	<ul id="menu-nav">
+            	<li >${employee.name}</li>
+            	<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
+            </ul>
+        </nav>
+        
+    </div>
+</header>
+<!-- End Header -->
 
