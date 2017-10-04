@@ -56,10 +56,9 @@ public class ArticleService {
 			for (Article article : this.selectAll()) {
 				if (data.getLabel().equals(article.getLabel()) && data.getDescription().equals(article.getDescription())) {
 					throw new Exception(String.format("L'article {0} existe déjà.", data));
-				} else {
-					articledao.insert(data);
-				}
+				} 
 			}
+			articledao.insert(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

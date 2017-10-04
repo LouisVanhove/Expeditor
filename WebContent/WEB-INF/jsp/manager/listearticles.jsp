@@ -10,49 +10,53 @@
 			
 			<div class="row">
 				<div class="col-sm-12 col-xs-12">
-					<h3>Liste des articles</h3>
+					<h3>Gestion Articles</h3>
 					
-					<form action="${pageContext.request.contextPath}/manager/gererarticles" method="post">
-					<div class=" add-task-row">
-						<!-- Bouton ajouter -->
-						<input type="submit" class="btn btn-md btn-primary" name="ajouter"
-							value="Ajouter">
-					</div>
-					</form>
-
-					<div class="panel-body">
-						<c:forEach var="article" items="${listearticles}">
-							<form action="${pageContext.request.contextPath}/manager/gererarticles" method="post">
-
-							<div class="task-content">
-								<ul class="list-group">
-									<li>
-										<div class="list-group-item">
-												<span class="task-title-sp">${article.id}</span> 
-												<span class="task-title-sp">${article.label}</span> 
-												<span class="task-title-sp">${article.description}</span>
-												<span class="task-title-sp">${article.weight}</span>
-
-												<div class="pull-right hidden-phone">
-													<!-- Bouton modifier -->
-													<button class="buttonmodifier" name="modifier">
-														<i class="fa fa-pencil"></i>
-													</button>
-
-													<!-- Bouton supprimer -->
-													<button class="buttonsupprimer" name="supprimer">
-														<i class="fa fa-trash-o"></i>
-													</button>
-												</div>
-											</div>
-									</li>
-								</ul>
-							</div>
-						</form>
-					</c:forEach>
-					<br>
-					<span class="message">${message}</span>
-				</div>
+					<c:if test="${listarticles.size() < 1}">
+						<div id="ligne-article">
+							<span>Il n'y a aucun article dans la base de données pour le moment.</span>
+						</div>
+					</c:if>
+					
+					<c:if test="${listarticles.size() > 0}">
+						<div class="panel-body">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Référence</th>
+											<th>Label</th>
+											<th>Description</th>
+											<th>Poids</th>
+											<th></th>
+											<form action="${pageContext.request.contextPath}/manager/EditArticle" method="post">
+												<th><input class="btn btn-md btn-primary" type="submit" name="add" value="Ajouter"></th>
+											</form>
+										</tr>
+									</thead>
+								<tbody>
+								
+									<c:forEach var="article" items="${listarticles}">
+										<tr>
+											<form action="${pageContext.request.contextPath}/manager/EditArticle" method="post">
+												<input type="hidden" name="id_article" value="${article.id}"/>
+												<td scope="row">${article.id}</td>
+												<td>${article.label}</td>
+												<td>${article.description}</td>
+												<td>${article.weight}</td>
+												<td><input class="btn btn-md btn-primary" type="submit" name="modify" value="Modifier"></td>
+											</form>
+											<form id="formSuppression${article.id}" action="${pageContext.request.contextPath}/manager/DeleteArticle" method="POST">
+												<input type="hidden" name="id_article" value="${article.id}"/>
+												<input type="hidden" name="delete" value="delete"/>
+											</form>
+												<td><button class="btn btn-md btn-danger"  onclick="confirmArticleSuppression('formSuppression${article.id}')" value="${article.id}">Supprimer</button></td>
+										</tr>	
+									</c:forEach>
+								</tbody>
+							</table>
+							<span class="message">${message}</span>
+						</div>
+					</c:if>
 						
 				</div><!-- fin -
 			</div><!-- fin row -->
