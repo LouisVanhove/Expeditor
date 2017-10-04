@@ -92,6 +92,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ImportCsvServlet</servlet-name>
-    <url-pattern>/import</url-pattern>
+    <url-pattern>/manager/import</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Test</display-name>
+    <servlet-name>Test</servlet-name>
+    <servlet-class>test.Test</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Test</servlet-name>
+    <url-pattern>/Test</url-pattern>
   </servlet-mapping>
 </web-app>
