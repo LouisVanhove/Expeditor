@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.enums.Profile;
@@ -27,35 +31,90 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	private static final String COLUMN_PROFILE = "profile";
 	private static final String COLUMN_ARCHIVED = "archived";
 	
-	private static final String SELECT_EMPLOYE_BY = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
+	private static final String SELECT_EMPLOYE_BY_LOGIN = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
 			+ " FROM EMPLOYEES e" 
 			+ " WHERE e.login=? AND e.password=? AND e.archived=0" ;
 	
 	private static final String SELECT_ALL_EMPLOYEES = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
 			+ " FROM EMPLOYEES e"
 			+ " WHERE e.archived=0";
+	
+	private static final String INSERT_EMPLOYEE = "INSERT INTO EMPLOYEES (login, password, name, firstname, profile, archived)"
+			+ " VALUES (?,?,?,?,?,0)";
 
+	private static final String UPDATE_EMPLOYE_BY_ID = "UPDATE EMPLOYEES"
+			+ " SET login=?,password=?,name=?,firstname=?,profile=?, archived=0"
+			+ " WHERE id=?";
+	
+	private static final String ARCHIVE_EMPLOYE_BY_ID = "UPDATE EMPLOYEES"
+			+ " SET login=?,password=?,name=?,firstname=?,profile=?, archived=1"
+			+ " WHERE id=?";
+	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
+	/**
+	 * Méthode pour ajouter un employé dans la BDD.
+	 */
 	@Override
 	public void insert(Employee data) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(INSERT_EMPLOYEE, Statement.RETURN_GENERATED_KEYS);
+			stm.setString(1, data.getLogin());
+			stm.setString(2, data.getPassword());
+			stm.setString(3, data.getLastName());
+			stm.setString(4, data.getFirstName());
+			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 0));
+			stm.executeUpdate();			
+		} catch (SQLException e) {
+			logger.severe(this.getClass().getName()+"#insert : "+e.getMessage());
+			throw new SQLException("Erreur lors de l'insertion de l'employé dans la base de données.");
+		}		
 	}
 
+	/**
+	 * Méthode pour modifier un employé dans la BDD.
+	 */
 	@Override
 	public void update(Employee data) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(UPDATE_EMPLOYE_BY_ID);
+			stm.setString(1, data.getLogin());
+			stm.setString(2, data.getPassword());
+			stm.setString(3, data.getLastName());
+			stm.setString(4, data.getFirstName());
+			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 0));
+			stm.setInt(6, data.getId());
+			stm.executeUpdate();			
+		} catch (SQLException e) {
+			logger.severe(this.getClass().getName()+"#update : "+e.getMessage());
+			throw new SQLException("Erreur lors de la modification de l'employé dans la base de données.");
+		}			
 	}
 
+	/**
+	 * Méthode pour archiver un employé dans la BDD.
+	 */
 	@Override
 	public void delete(Employee data) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(ARCHIVE_EMPLOYE_BY_ID);
+			stm.setString(1, data.getLogin());
+			stm.setString(2, data.getPassword());
+			stm.setString(3, data.getLastName());
+			stm.setString(4, data.getFirstName());
+			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 0));
+			stm.setInt(6, data.getId());
+			stm.executeUpdate();			
+		} catch (SQLException e) {
+			logger.severe(this.getClass().getName()+"#archive : "+e.getMessage());
+			throw new SQLException("Erreur lors de l'archivage de l'employé dans la base de données.");
+		}			
 	}
 
+	/**
+	 * Méthode pour sélectionner un employé en fonction de son id.
+	 */
 	@Override
 	public Employee selectById(int id) throws SQLException {
 		// TODO Auto-generated method stub
@@ -88,7 +147,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		Employee employee = null;
 
 		try (Connection cnx = ConnectionPool.getConnection()) {
-			PreparedStatement cmd = cnx.prepareStatement(SELECT_EMPLOYE_BY);
+			PreparedStatement cmd = cnx.prepareStatement(SELECT_EMPLOYE_BY_LOGIN);
 			cmd.setString(1, login);
 			cmd.setString(2, password);
 
