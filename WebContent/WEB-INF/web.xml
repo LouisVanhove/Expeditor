@@ -94,4 +94,34 @@
     <servlet-name>ImportCsvServlet</servlet-name>
     <url-pattern>/import</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Servlet de gestion des employés (CRUD)</description>
+    <display-name>ManageEmployeesServlet</display-name>
+    <servlet-name>ManageEmployeesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ManageEmployeesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageEmployeesServlet</servlet-name>
+    <url-pattern>/manager/gereremployees</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Gère l'ajout et la modification d'un employé</description>
+    <display-name>AddModifyEmployeeServlet</display-name>
+    <servlet-name>AddModifyEmployeeServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.AddModifyEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddModifyEmployeeServlet</servlet-name>
+    <url-pattern>/manager/EditEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Servlet pour supprimer un employé</description>
+    <display-name>DeleteEmployeeServlet</display-name>
+    <servlet-name>DeleteEmployeeServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.DeleteEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteEmployeeServlet</servlet-name>
+    <url-pattern>/manager/DeleteEmployee</url-pattern>
+  </servlet-mapping>
 </web-app>
