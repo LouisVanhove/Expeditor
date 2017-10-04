@@ -35,6 +35,16 @@
     <url-pattern>/employee/*</url-pattern>
   </filter-mapping>
   <servlet>
+    <description></description>
+    <display-name>ListArticlesServlet</display-name>
+    <servlet-name>ListArticlesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ListArticlesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListArticlesServlet</servlet-name>
+    <url-pattern>/manager/listarticles</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <description>Servlet d'affichage de la liste des employés</description>
     <display-name>ListEmployeesServlet</display-name>
     <servlet-name>ListEmployeesServlet</servlet-name>
@@ -52,7 +62,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>GenDeliveryNoteServlet</servlet-name>
-    <url-pattern>/employee/BonLivraison</url-pattern>
+    <url-pattern>/BonLivraison</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -62,6 +72,56 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>SwitchToNextOrderServlet</servlet-name>
-    <url-pattern>/employee/Commande</url-pattern>
+    <url-pattern>/Commande</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ManageArticlesServlet</display-name>
+    <servlet-name>ManageArticlesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ManageArticlesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageArticlesServlet</servlet-name>
+    <url-pattern>/manager/gererarticles</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ImportCsvServlet</display-name>
+    <servlet-name>ImportCsvServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ImportCsvServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ImportCsvServlet</servlet-name>
+    <url-pattern>/import</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Servlet de gestion des employés (CRUD)</description>
+    <display-name>ManageEmployeesServlet</display-name>
+    <servlet-name>ManageEmployeesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ManageEmployeesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageEmployeesServlet</servlet-name>
+    <url-pattern>/manager/gereremployees</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Gère l'ajout et la modification d'un employé</description>
+    <display-name>AddModifyEmployeeServlet</display-name>
+    <servlet-name>AddModifyEmployeeServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.AddModifyEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddModifyEmployeeServlet</servlet-name>
+    <url-pattern>/manager/EditEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Servlet pour supprimer un employé</description>
+    <display-name>DeleteEmployeeServlet</display-name>
+    <servlet-name>DeleteEmployeeServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.DeleteEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteEmployeeServlet</servlet-name>
+    <url-pattern>/manager/DeleteEmployee</url-pattern>
   </servlet-mapping>
 </web-app>

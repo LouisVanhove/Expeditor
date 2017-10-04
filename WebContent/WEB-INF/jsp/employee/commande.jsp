@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:import url="/WEB-INF/fragments/header.jsp"/>
+
 	<br>
 	<br>${sessionScope.currentOrder.id }
 	<br>${sessionScope.currentOrder.customer }
@@ -14,7 +15,6 @@
 	<c:forEach var="article" items="${sessionScope.currentOrder.listArticles}">
 		${article.label}<br>
 	</c:forEach>
-
 
 
 <c:import url="/WEB-INF/fragments/footer.jsp"/>

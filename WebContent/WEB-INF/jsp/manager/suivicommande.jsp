@@ -2,14 +2,15 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:import url="/WEB-INF/fragments/header.jsp"/>
+<c:import url="/WEB-INF/fragments/menumanager.jsp" />
 
 <!-- debut section -->
-	<section id="page_connexion" class="section">
+	<section id="page_suivicommande" class="section">
 		<div class="container">
 			
 			<div class="row">
 				<div class="col-separator col-xs-12 col-sm-6">
-						<h4>Suivi commande</h4>
+						<h3>Suivi commande</h3>
 				</div><!-- fin -
 			</div><!-- fin row -->
 			

@@ -87,7 +87,7 @@ public class ConnectServlet extends HttpServlet {
 						redirection = "/employee/Commande";	
 					} 
 			}else {
-					request.getSession().setAttribute("message", " Ce compte n'existe pas");
+					request.getSession().setAttribute("message", "Erreur de saisie");
 					redirection = "/WEB-INF/jsp/connection.jsp";	
 			}
 			
@@ -114,7 +114,7 @@ public class ConnectServlet extends HttpServlet {
 	private void validatePassword(String password) throws Exception{
 	    if (password != null && password.trim().length() != 0) { 
 	    	if (password.trim().length() < 6) {
-	            throw new Exception("Les mots de passe doivent contenir au moins 6 caractères.");
+	            throw new Exception("Merci de saisir un bon mot de passe.");
 	        }
 	    } else {
 	        throw new Exception("Merci de saisir et confirmer votre mot de passe.");
