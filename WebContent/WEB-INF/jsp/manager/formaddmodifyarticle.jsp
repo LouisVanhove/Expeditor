@@ -13,7 +13,7 @@
 					<h3>Ajout/Modification d'un article</h3>
 					
 					<div class="panel-body">
-				 		<form id="editArticle" class="editArticle" action="<%=request.getContextPath()%>/manager/gererarticles" method="post"> 
+				 		<form id="editArticle" class="editArticle" action="<%=request.getContextPath()%>/manager/SaveArticle" method="post"> 
 				 		
 				 			<fieldset id="write_article" name="write_article" value="Saisie Article">
    								<input type="hidden" id="id_article" name="id_article" value="${articleCurrent.id}"/><br>
@@ -22,7 +22,7 @@
    								<label id="weight" >Poids (g) :</label> 
    								<input type="text" id="txtboxWeight" name="txtboxWeight" size="100" class="form-control"  value="${articleCurrent.weight}" required/><br>
    								<label id="description" >Description :</label> 
-   								<textarea id="txtboxDescription" name="txtboxDescription" class="form-control"  rows="10" size="255" value="${articleCurrent.description}" required></textarea><br>
+   								<textarea id="txtboxDescription" name="txtboxDescription" class="form-control"  rows="10" size="255" value="${articleCurrent.description}" required>${articleCurrent.description}</textarea><br>
 								<input type="submit" class="btn btn-md btn-primary" id="save" name="save" value="Enregistrer"/> 
 								<input type="submit" class="btn btn-md btn-primary" id="cancel" name="cancel" value="Annuler"/><br>
 							</fieldset> 

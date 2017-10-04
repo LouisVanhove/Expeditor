@@ -61,8 +61,7 @@ public class ManageArticlesServlet extends HttpServlet {
 		
 		} else if (request.getParameter("add")!=null) {
 			try {
-				Article articleCurrent = new Article();;
-				request.setAttribute("articleCurrent", articleCurrent);
+				request.setAttribute("articleCurrent", null);
 				view = "/WEB-INF/jsp/manager/formaddmodifyarticle.jsp";
 				
 			} catch (NumberFormatException e) {

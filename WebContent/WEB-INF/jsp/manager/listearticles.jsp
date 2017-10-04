@@ -28,7 +28,7 @@
 											<th>Description</th>
 											<th>Poids</th>
 											<th></th>
-											<form action="${pageContext.request.contextPath}/manager/gererarticles" method="post">
+											<form action="${pageContext.request.contextPath}/manager/EditArticle" method="post">
 												<th><input class="btn btn-md btn-primary" type="submit" name="add" value="Ajouter"></th>
 											</form>
 										</tr>
@@ -36,17 +36,21 @@
 								<tbody>
 								
 									<c:forEach var="article" items="${listarticles}">
-										<form action="${pageContext.request.contextPath}/manager/gererarticles" method="post">
-											<tr>
-												<input type="hidden" id="article" name="${article}"/>
+										<tr>
+											<form action="${pageContext.request.contextPath}/manager/EditArticle" method="post">
+												<input type="hidden" name="id_article" value="${article.id}"/>
 												<td scope="row">${article.id}</td>
 												<td>${article.label}</td>
 												<td>${article.description}</td>
 												<td>${article.weight}</td>
 												<td><input class="btn btn-md btn-primary" type="submit" name="modify" value="Modifier"></td>
-												<td><input class="btn btn-md btn-danger" type="submit" name="delete" value="Supprimer"></td>
-											</tr>
-										</form>
+											</form>
+											<form id="formSuppression${article.id}" action="${pageContext.request.contextPath}/manager/DeleteArticle" method="POST">
+												<input type="hidden" name="id_article" value="${article.id}"/>
+												<input type="hidden" name="delete" value="delete"/>
+											</form>
+												<td><button class="btn btn-md btn-danger"  onclick="confirmArticleSuppression('formSuppression${article.id}')" value="${article.id}">Supprimer</button></td>
+										</tr>	
 									</c:forEach>
 								</tbody>
 							</table>
