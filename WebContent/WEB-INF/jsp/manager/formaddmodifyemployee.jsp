@@ -3,11 +3,6 @@
 
 <c:import url="/WEB-INF/fragments/header.jsp"/>
 ${requestScope.test}
-
-
-
-ecrire le form avec les données d'employé
-
-
-
+<br>
+${requestScope.id}
 <c:import url="/WEB-INF/fragments/footer.jsp"/>

@@ -68,10 +68,13 @@ public class EmployeeService implements ICrudServices<Employee>{
 		return result;
 	}
 
+	/**
+	 * Méthode pour sélectionner un employé donné.
+	 */
 	@Override
 	public Employee selectById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Employee result = employeedao.selectById(id);
+		return result;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import fr.lala.expeditor.models.Article;
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.utils.MonLogger;
@@ -44,8 +45,11 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			+ " WHERE id=?";
 	
 	private static final String ARCHIVE_EMPLOYE_BY_ID = "UPDATE EMPLOYEES"
-			+ " SET login=?,password=?,name=?,firstname=?,profile=?, archived=1"
+			+ " SET archived = 1"
 			+ " WHERE id=?";
+	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
+			+ " FROM EMPLOYEES e"
+			+ " WHERE e.id=?";
 	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
@@ -96,12 +100,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	public void delete(Employee data) throws SQLException {
 		try(Connection cnx = ConnectionPool.getConnection()){
 			PreparedStatement stm = cnx.prepareStatement(ARCHIVE_EMPLOYE_BY_ID);
-			stm.setString(1, data.getLogin());
-			stm.setString(2, data.getPassword());
-			stm.setString(3, data.getLastName());
-			stm.setString(4, data.getFirstName());
-			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 0));
-			stm.setInt(6, data.getId());
+			stm.setInt(1, data.getId());
 			stm.executeUpdate();			
 		} catch (SQLException e) {
 			logger.severe(this.getClass().getName()+"#archive : "+e.getMessage());
@@ -114,8 +113,20 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	 */
 	@Override
 	public Employee selectById(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Employee result = null;
+		
+		try (Connection cnx = ConnectionPool.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_EMPLOYEE_BY_ID);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+
+			if (rs.next()) {
+				result = itemBuilder(rs);
+			}
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return result;
 	}
 	
 	/**

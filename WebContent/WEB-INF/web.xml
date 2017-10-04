@@ -124,4 +124,14 @@
     <servlet-name>DeleteEmployeeServlet</servlet-name>
     <url-pattern>/manager/DeleteEmployee</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Servlet pour enregistrer l'ajout ou la modification d'un employé</description>
+    <display-name>SaveEmployeeServlet</display-name>
+    <servlet-name>SaveEmployeeServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.SaveEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SaveEmployeeServlet</servlet-name>
+    <url-pattern>/manager/SaveEmployee</url-pattern>
+  </servlet-mapping>
 </web-app>
