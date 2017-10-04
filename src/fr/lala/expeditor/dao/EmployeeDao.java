@@ -38,24 +38,36 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
+	/**
+	 * Méthode d'insertion d'un employé en base.
+	 */
 	@Override
 	public void insert(Employee data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Méthode de modification d'un employé  en base.
+	 */
 	@Override
 	public void update(Employee data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Méthode de suppression d'un employé  en base.
+	 */
 	@Override
 	public void delete(Employee data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Méthode de sélection d'un employé en base en fonction de son id.
+	 */
 	@Override
 	public Employee selectById(int id) throws SQLException {
 		// TODO Auto-generated method stub
@@ -84,6 +96,12 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		return result;
 	}
 
+	/**
+	 * Methode de sélection d'un employé en base en fonction de son login et mot de passe.
+	 * @param login
+	 * @param password
+	 * @return
+	 */
 	public Employee selectByLogin(String login, String password){
 		Employee employee = null;
 

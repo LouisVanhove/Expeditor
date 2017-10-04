@@ -9,25 +9,24 @@
 <body>
 
 	
-		<!-- Navigation -->
-   		 <nav class="navbar navbar-inverse navbar-fixed-top" id="mainNav">
-      		<div class="container">
-      			<div class="navbar-header">
-       		 		<a class="navbar-brand" href="/">EXPEDITOR - Gestion de préparation de commandes</a>
-       		 	</div>
-        		<div id="navbar" class="navbar-collapse collapse">
-           			<ul class="nav navbar-nav">
-            			<li class="nav-item">${employee.name}</li>
-            			<li class="nav-item">
-              				<a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a>
-           		 		</li>
-          			</ul>
-        		</div>
-      		</div>
-    	</nav> 
 
-	<!--Header-->
-	<header>
-	<p>houhou</p>
-	</header>
+<!-- Header -->
+<header>
+    <div class="bandeau-nav">
+    	<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
+        
+        <div id="logo">
+        	<a href="/connexion"><h4>EXPEDITOR - Gestion de préparation de commandes</h4></a>
+        </div>
+        
+        <nav id="menu">
+        	<ul id="menu-nav">
+            	<li >${employee.name}</li>
+            	<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
+            </ul>
+        </nav>
+        
+    </div>
+</header>
+<!-- End Header -->
 

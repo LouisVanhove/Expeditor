@@ -9,7 +9,7 @@
 			
 			<div class="row">
 				<div class="col-separator col-xs-12 col-sm-6">
-						<h4>Commande</h4>
+						<h3>Commande</h3>
 				</div><!-- fin -
 			</div><!-- fin row -->
 			
