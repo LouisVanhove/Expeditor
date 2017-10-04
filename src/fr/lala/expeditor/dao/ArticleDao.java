@@ -25,7 +25,7 @@ public class ArticleDao implements ICrudDao<Article>{
 	private static final String COLUMN_ARCHIVED = "archived";
 	
 	private static final String SELECT_ARTICLES = "SELECT a.id, a.label, a.description, a.weight, a.archived "
-			+ " FROM ARTICLES a" ;
+			+ " FROM ARTICLES a WHERE a.archived=0" ;
 	private static final String SELECT_ARTICLE_BY_ID = "SELECT a.id, a.label, a.description, a.weight, a.archived FROM ARTICLES a"
 			+ " WHERE a.Id=?";
 	private static final String INSERT_ARTICLE= "INSERT INTO ARTICLES (Label, Description, Weight, Archived) VALUES(?,?,?,0);";
@@ -64,6 +64,7 @@ public class ArticleDao implements ICrudDao<Article>{
 			cmd.setString(1, data.getLabel());
 			cmd.setString(2, data.getDescription());
 			cmd.setInt(3, data.getWeight());
+			cmd.setInt(4, data.getId());
 
 			cmd.executeUpdate();
 
@@ -86,7 +87,8 @@ public class ArticleDao implements ICrudDao<Article>{
 			cmd.executeUpdate();
 
 		} catch (SQLException e) {
-			logger.severe("Erreur : " + e.getMessage());
+			logger.severe(this.getClass().getName()+"#archive : "+e.getMessage());
+			throw new SQLException("Erreur lors de l'archivage de l'article dans la base de données.");
 		}
 	}
 
