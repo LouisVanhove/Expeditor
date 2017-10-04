@@ -10,24 +10,24 @@
 
 	
 		<!-- Navigation -->
-   		 <nav class="navbar navbar-inverse navbar-fixed-top" id="mainNav">
+   		 <nav class="navbar navbar-default navbar-fixed-top" id="mainNav">
       		<div class="container">
       			<div class="navbar-header">
-       		 		<a class="navbar-brand" href="/">EXPEDITOR - Gestion de préparation de commandes</a>
+      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle Navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+       		 		<a class="navbar-brand" href="/"><h2>EXPEDITOR</h2> <h5>- Gestion de préparation de commandes</h5></a>
        		 	</div>
-        		<div id="navbar" class="navbar-collapse collapse">
-           			<ul class="nav navbar-nav">
-            			<li class="nav-item">${employee.name}</li>
-            			<li class="nav-item">
-              				<a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a>
-           		 		</li>
+        		<div class="navbar-collapse collapse">
+           			<ul class="nav navbar-nav navbar-right">
+            			<li >${employee.name}</li>
+            			<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
           			</ul>
         		</div>
       		</div>
     	</nav> 
 
-	<!--Header-->
-	<header>
-	<p>houhou</p>
-	</header>
 

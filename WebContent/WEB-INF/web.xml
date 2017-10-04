@@ -14,7 +14,6 @@
     <servlet-name>DisconnectServlet</servlet-name>
     <url-pattern>/deconnexion</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>ConnectServlet</display-name>
@@ -25,8 +24,6 @@
     <servlet-name>ConnectServlet</servlet-name>
     <url-pattern>/connexion</url-pattern>
   </servlet-mapping>
-  
-  
   <filter>
     <display-name>ConnectionFilter</display-name>
     <filter-name>ConnectionFilter</filter-name>
@@ -37,4 +34,14 @@
     <url-pattern>/manager/*</url-pattern>
     <url-pattern>/employee/*</url-pattern>
   </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ListArticlesServlet</display-name>
+    <servlet-name>ListArticlesServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ListArticlesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListArticlesServlet</servlet-name>
+    <url-pattern>/manager/listarticles</url-pattern>
+  </servlet-mapping>
 </web-app>

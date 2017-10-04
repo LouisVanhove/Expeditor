@@ -4,12 +4,11 @@
 <c:import url="/WEB-INF/fragments/header.jsp"/>
 
 <!-- debut section -->
-	<section id="page_connexion" class="section">
+	<section id="page_connexion">
 		<div class="container">
-			
 			<div class="row">
 				<div class="col-separator col-xs-12 col-sm-6">
-						<h4>Authentification</h4>
+						<h2>Authentification</h2>
 
 							<form class="connexion" action="<%= request.getContextPath() %>/connexion" method="post" data-toggle="validator" data-disable="false">
 								<div class="form-group text-left">
