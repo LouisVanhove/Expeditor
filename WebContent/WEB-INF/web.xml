@@ -62,7 +62,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>GenDeliveryNoteServlet</servlet-name>
-    <url-pattern>/BonLivraison</url-pattern>
+    <url-pattern>/employee/BonLivraison</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -72,7 +72,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>SwitchToNextOrderServlet</servlet-name>
-    <url-pattern>/Commande</url-pattern>
+    <url-pattern>/employee/Commande</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>

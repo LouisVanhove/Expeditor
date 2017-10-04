@@ -48,13 +48,14 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		customer.setAddress("Palais de l'Elysée");
 		customer.setZipCode("85000");
 		customer.setCity("Baton Rouge");
+		
 		List<Article> articles = new ArrayList<>();
 		for(int i=0; i <10; i++){
 			Article a = new Article();
 			a.setId(12);
 			a.setLabel("Article n°"+i);
 			a.setWeight(i*i);
-			
+			a.setQuantity(i+2);
 			articles.add(a);
 		}
 		

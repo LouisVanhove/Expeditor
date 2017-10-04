@@ -66,13 +66,13 @@ public class GenDeliveryNoteServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		System.out.println(nomFichier);
 		if(nomFichier != null){
 			
 			//path = "file://"+path;
 			System.out.println("Nom du fichier : " + path);
 			request.setAttribute("path", request.getContextPath()+"/pdf/"+nomFichier);
-			request.getRequestDispatcher("/WEB-INF/jsp/employee/bon_livraison.jsp").forward(request, response);
+			request.getRequestDispatcher("/pdf/").forward(request, response);
 		}
 		
 	}
