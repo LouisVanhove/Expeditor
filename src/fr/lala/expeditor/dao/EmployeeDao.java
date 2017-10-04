@@ -5,12 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.enums.Profile;
@@ -143,6 +140,12 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		return result;
 	}
 
+	/**
+	 * Methode de sélection d'un employé en base en fonction de son login et mot de passe.
+	 * @param login
+	 * @param password
+	 * @return
+	 */
 	public Employee selectByLogin(String login, String password){
 		Employee employee = null;
 
