@@ -84,4 +84,14 @@
     <servlet-name>ManageArticlesServlet</servlet-name>
     <url-pattern>/manager/gererarticles</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ImportCsvServlet</display-name>
+    <servlet-name>ImportCsvServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.ImportCsvServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ImportCsvServlet</servlet-name>
+    <url-pattern>/import</url-pattern>
+  </servlet-mapping>
 </web-app>
