@@ -35,24 +35,33 @@ public class EmployeeService implements ICrudServices<Employee>{
 		
 	}
 
+	/**
+	 * Méthode pour ajouter un employé dans la BDD.
+	 */
 	@Override
 	public void insert(Employee data) throws Exception {
-		// TODO Auto-generated method stub
-		
+		employeedao.insert(data);		
 	}
 
+	/**
+	 * Méthode pour modifier un employé dans la BDD.
+	 */
 	@Override
 	public void update(Employee data) throws Exception {
-		// TODO Auto-generated method stub
-		
+		employeedao.update(data);
 	}
 
+	/**
+	 * Méthode pour archiver un employé dans la BDD.
+	 */
 	@Override
 	public void delete(Employee data) throws Exception {
-		// TODO Auto-generated method stub
-		
+		employeedao.delete(data);
 	}
 
+	/**
+	 * Méthode pour afficher l'ensemble des employés non archivés.
+	 */
 	@Override
 	public List<Employee> selectAll() throws Exception {
 		List<Employee> result = employeedao.selectAll();

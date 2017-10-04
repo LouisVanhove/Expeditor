@@ -6,10 +6,9 @@
 <!-- debut section -->
 	<section id="page_connexion" class="section">
 		<div class="container">
-			
 			<div class="row">
 				<div class="col-separator col-xs-12 col-sm-6">
-						<h4>Authentification</h4>
+						<h3>Authentification</h3>
 
 							<form class="connexion" action="<%= request.getContextPath() %>/connexion" method="post" data-toggle="validator" data-disable="false">
 								<div class="form-group text-left">
