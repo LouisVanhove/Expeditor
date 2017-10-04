@@ -37,7 +37,7 @@
 						<c:forEach items="${listEmployees}" var="employee">														
 							<tr>
 							<form action="${pageContext.request.contextPath}/manager/EditEmployee" method="post">
-								<input type="hidden" name="employee" value="${employee.id}"/>
+								<input type="hidden" name="id_employee" value="${employee.id}"/>
 								<td scope="row">${employee.id}</td>
 								<td>${employee.lastName} ${employee.firstName}</td>
 								<td>${employee.profile}</td>

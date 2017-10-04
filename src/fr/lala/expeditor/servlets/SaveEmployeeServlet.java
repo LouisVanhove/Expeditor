@@ -10,16 +10,16 @@ import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.services.EmployeeService;
 
 /**
- * Servlet implementation class DeleteEmployeeServlet
+ * Servlet implementation class Save
  */
-public class DeleteEmployeeServlet extends HttpServlet {
+public class SaveEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private EmployeeService serviceE = new EmployeeService();   
-       
+    private EmployeeService serviceE = new EmployeeService();
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteEmployeeServlet() {
+    public SaveEmployeeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,7 +28,6 @@ public class DeleteEmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -36,22 +35,22 @@ public class DeleteEmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int identifiant = Integer.parseInt(request.getParameter("id_employee"));
-		//request.setAttribute("id", identifiant);
+		Employee employee = new Employee();
+		employee.setLogin(request.getParameter("login"));
 		
-		try {
-			Employee employee = serviceE.selectById(identifiant);
-			serviceE.delete(employee);
-			request.setAttribute("id", employee);
-			
-			request.setAttribute("action", "DELETE");
-			request.setAttribute("message", "La suppression s'est déroulée avec succès.");
-		} catch (Exception e) {
-			request.setAttribute("erreur", "La suppression a échoué.");
-			e.printStackTrace();
+		if(request.getAttribute("action") == "ajouter"){
+			try {
+				serviceE.insert(employee);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if(request.getAttribute("action") == "modifier"){
+			try {
+				serviceE.update(employee);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		// Rappel de la servlet ListEmployees
-		request.getRequestDispatcher("/manager/ListEmployees").forward(request, response);	
 	}
 
 }
