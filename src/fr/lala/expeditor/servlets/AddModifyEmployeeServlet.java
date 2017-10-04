@@ -15,6 +15,7 @@ import fr.lala.expeditor.services.EmployeeService;
 public class AddModifyEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private EmployeeService serviceE = new EmployeeService();
+	private String view = "/WEB-INF/jsp/manager/formaddmodifyemployee.jsp";
     
     /**
      * @see HttpServlet#HttpServlet()
@@ -28,7 +29,6 @@ public class AddModifyEmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -36,28 +36,24 @@ public class AddModifyEmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Employee employee = null;
 		//Test sur l'action voulue :
 		// Si c'est de l'ajoût, on ouvre un formulaire vide
-		if(request.getParameter("ajouter") != null){
-			request.setAttribute("action", "AJOUT");
-			
+		if(request.getParameter("add") != null){
+			request.setAttribute("currentEmployee", null);			
 		// Si c'est de la modification, on ouvre un formulaire pré-rempli avec les données de l'employé sélectionné
-		}else if (request.getParameter("modifier") != null){
-			request.setAttribute("action", "MODIFICATION");
+		}else if (request.getParameter("modify") != null){
 			//Appel au service Employee pour récupérer l'employé id = id
 			int id = Integer.parseInt(request.getParameter("id_employee"));
-			request.setAttribute("id", id);
 			try {
-				employee = serviceE.selectById(id);
+				Employee currentEmployee = serviceE.selectById(id);
+				request.setAttribute("currentEmployee", currentEmployee);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}	
-		//Mettre l'employé dans la request
-		request.setAttribute("employee", employee);
-		//forwarder
-		request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request, response);
+		request.getRequestDispatcher(view).forward(request, response);
 	}
 
 }

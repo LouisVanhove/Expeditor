@@ -124,7 +124,8 @@ public class EmployeeDao implements ICrudDao<Employee>{
 				result = itemBuilder(rs);
 			}
 		} catch (SQLException e) {
-			logger.severe("Erreur : " + e.getMessage());
+			logger.severe(this.getClass().getName()+"#selectId : "+e.getMessage());
+			throw new SQLException("Erreur lors de la sélection d'un employé dans la base de données.");
 		}
 		return result;
 	}
@@ -139,9 +140,9 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		List<Employee> result = new ArrayList<>();
 		
 		try(Connection cnx = ConnectionPool.getConnection()){
-			PreparedStatement cmd = cnx.prepareStatement(SELECT_ALL_EMPLOYEES);
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_EMPLOYEES);
 			
-			ResultSet rs = cmd.executeQuery();
+			ResultSet rs = stm.executeQuery();
 			while (rs.next()){
 				result.add(itemBuilder(rs));
 			}
