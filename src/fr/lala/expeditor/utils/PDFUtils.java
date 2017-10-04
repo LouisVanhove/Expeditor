@@ -25,9 +25,9 @@ public class PDFUtils {
 	private static final String pdfRepo ="/WEB-INF/pdf/";
 
 	
-    public static void createPdf(Order order) throws IOException, DocumentException {
+    public static void createDeliveryNote(Order order) throws IOException, DocumentException {
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfRepo+"cmd"+order.getId()+".pdf"));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfRepo+"order"+order.getId()+".pdf"));
         document.open();
         PdfContentByte canvas = writer.getDirectContent();
         
