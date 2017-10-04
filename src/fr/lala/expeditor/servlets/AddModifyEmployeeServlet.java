@@ -1,28 +1,21 @@
 package fr.lala.expeditor.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import fr.lala.expeditor.models.Employee;
-import fr.lala.expeditor.services.EmployeeService;
 
 /**
- * Servlet implementation class ListEmployeesServlet
+ * Servlet implementation class AddModifyEmployeeServlet
  */
-public class ListEmployeesServlet extends HttpServlet {
+public class AddModifyEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private EmployeeService serviceE = new EmployeeService();
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ListEmployeesServlet() {
+    public AddModifyEmployeeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,20 +32,25 @@ public class ListEmployeesServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-	}
-
-	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Employee> listEmployees = new ArrayList<>();
-		
-		try{
-			listEmployees = serviceE.selectAll();
-			request.setAttribute("listEmployees", listEmployees);
-			request.getRequestDispatcher("/WEB-INF/jsp/manager/employees.jsp").forward(request, response);
-		} catch (Exception e){
-			request.setAttribute("error", e.getMessage());
+		//Test sur l'action voulue :
+		if(request.getParameter("ajouter") != null){
+			//Cas de l'ajout, pas de remplissage formulaire
+			request.setAttribute("test", "AJOUT");
+		}else if (request.getParameter("modifier") != null){
+			// Cas modification 
+			request.setAttribute("test", "MODIFICATION");
 		}
 		
-	}	
+		
+		
+		//Appel au service Employee pour récupérer l'employé id = id
+		
+		//Mettre l'employé dans la request
+		
+		//forwarder
+		
+		
+		request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request, response);
+	}
+
 }
