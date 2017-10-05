@@ -42,8 +42,8 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 			session.setAttribute("currentOrder", null);
 		}
 		
-		//Order currentOrder=new OrderService().getNextOrder();
 		
+		/*
 		//DEBUT BOUCHON
 		Customer customer = new Customer();
 		customer.setName("Aurélia Delauné");
@@ -67,7 +67,8 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		currentOrder.setListArticles(articles);
 		currentOrder.setCustomer(customer);
 		//Fin BOUCHON
-		
+		*/
+		Order currentOrder=new OrderService().getNextOrder();
 		session.setAttribute("currentOrder", currentOrder);
 		request.getRequestDispatcher("/WEB-INF/jsp/employee/commande.jsp").forward(request, response);
 		

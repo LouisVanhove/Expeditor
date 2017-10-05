@@ -1,26 +1,21 @@
 package fr.lala.expeditor.dao;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.opencsv.CSVReader;
-
-import fr.lala.expeditor.models.Article;
-import fr.lala.expeditor.models.Customer;
-import fr.lala.expeditor.models.Order;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
+
+import fr.lala.expeditor.models.Article;
+import fr.lala.expeditor.models.Customer;
+import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.models.Order;
+import fr.lala.expeditor.models.enums.State;
 import fr.lala.expeditor.utils.MonLogger;
 
 /**
@@ -44,17 +39,8 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	private static final String SEPARATOR = ",";
 	private static final String DATE_FORM = "dd/MM/yyyy HH:mm:ss";
 	
-	private static final String REQ_GET_NEXT_ORDER =
-			"SELECT TOP 1"
-			+" *" 
-			+" FROM "
-			+ TABLE_ORDERS
-			+" WHERE" 
-			+ COLUMN_ID_EMPLOYEE +" IS NULL"
-			+" AND "
-			+ COLUMN_ARCHIVED +"=0"
-			+" ORDER BY"
-			+ COLUMN_ORDER_DATE+" ASC";
+	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC";
+			
 	
 	private static final String REQ_INSERT_ORDER =
 			"INSERT INTO "
@@ -135,6 +121,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	public Order selectNextOrder(){
 		Order result = null ;
 		try (Connection cnx = ConnectionPool.getConnection()) {
+			System.out.println("Entrée dans le try de selectNextOrder");
 			PreparedStatement cmd = cnx.prepareStatement(REQ_GET_NEXT_ORDER);
 			ResultSet rs = cmd.executeQuery();
 			if (rs.next()) {
@@ -144,10 +131,11 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		} catch (SQLException e) {
 			logger.severe("Erreur : " + e.getMessage());
 		}
+		System.out.println("Next order : " +result);
 		return result;
 	}
 	
-	/**
+	/**z
 	 * Méthode en charge d'insérer une commande dans la bdd.
 	 */
 	@Override
@@ -206,8 +194,14 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	@Override
 	public Order itemBuilder(ResultSet rs) throws SQLException {
 		Order result = new Order();
+		Customer c = new CustomerDao().selectById(rs.getInt(COLUMN_ID_CUSTOMER));
+		Employee e = new EmployeeDao().selectById(rs.getInt(COLUMN_ID_EMPLOYEE));
+		result.setCustomer(c);
 		result.setId(rs.getInt(COLUMN_ID));
 		result.setOrderDate(rs.getDate(COLUMN_ORDER_DATE));
+		result.setProcessingDate(rs.getDate(COLUMN_TREATMENT_DATE));
+		result.setEmployee(e);
+		result.setState(State.values()[rs.getInt(COLUMN_STATE)-1]);
 		result.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
 	
 		return result;

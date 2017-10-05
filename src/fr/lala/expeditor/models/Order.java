@@ -121,10 +121,11 @@ public class Order implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Commande [id=").append(id)
-				.append(", employé=").append(employee)
-				.append(", client=").append(customer)
-				.append(", état=").append(state).append("]");
+		builder.append("Order [id=").append(id).append(", orderDate=").append(orderDate).append(", processingDate=")
+				.append(processingDate).append(", employee=").append(employee).append(", customer=").append(customer)
+				.append(", state=").append(state).append("]");
 		return builder.toString();
 	}
+
+
 }

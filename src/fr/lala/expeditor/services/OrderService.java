@@ -42,6 +42,7 @@ public class OrderService implements ICrudServices<Order> {
 		Order result = null ; 
 		result = new OrderDao().selectNextOrder();
 		
+		
 		return result;
 	}
 

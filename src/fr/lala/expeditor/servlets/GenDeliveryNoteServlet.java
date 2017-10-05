@@ -1,9 +1,6 @@
 package fr.lala.expeditor.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.itextpdf.text.DocumentException;
 
-import fr.lala.expeditor.models.Article;
-import fr.lala.expeditor.models.Customer;
 import fr.lala.expeditor.models.Order;
 import fr.lala.expeditor.utils.PDFUtils;
 
