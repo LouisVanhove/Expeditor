@@ -13,22 +13,26 @@
 					
 					<div class="panel-body">
 				 		<form id="editEmploye" class="editEmploye" action="${pageContext.request.contextPath}/manager/SaveEmployee" method="post"> 				 		
-				 				<input type="hidden" id="id_employee" name="id_employee" value="${currentEmployee.id}"/><br>
+				 			<fieldset id="write_employee" name="write_employee" value="Saisie Employé">
    								<label id="login" >Identifiant :</label>
-     							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${currentEmployee.login}" required /><br>
+     							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${requestScope.currentEmployee.login}" required /><br>
    								<label id="password" >Mot de passe :</label> 
-   								<input type="password" id="txtboxPassword" name="txtboxPassword" size="100" class="form-control" value="${currentEmployee.password}" required/><br>    
+   								<input type="password" id="txtboxPassword" name="txtboxPassword" size="100" class="form-control" value="${requestScope.currentEmployee.password}" required/><br>    
    								<label id="lastName" >Nom :</label> 
-   								<input type="text" id="txtboxLastName" name="txtboxLastName" size="100" class="form-control" value="${currentEmployee.lastName}" required/><br>
+   								<input type="text" id="txtboxLastName" name="txtboxLastName" size="100" class="form-control" value="${requestScope.currentEmployee.lastName}" required/><br>
    								<label id="firstName" >Prénom :</label> 
-   								<input type="text" id="txtboxFirstName" name="txtboxFirstName" size="100" class="form-control" value="${currentEmployee.firstName}" required/><br>
+   								<input type="text" id="txtboxFirstName" name="txtboxFirstName" size="100" class="form-control" value="${requestScope.currentEmployee.firstName}" required/><br>
    								<label id="profile" >Poste :</label><br>
    								<select class="form-control" name="selectProfile" required>
-								    <option value="manager">Manager</option>
-								    <option value="shipping_clerk">Préparateur de Commandes</option>
+   									<c:forEach items="${requestScope.profiles}" var="profile">
+								    	<option value="${profile.getId()}" 
+								    			<c:if test="${profile.equals(currentEmployee.profile)}"> selected</c:if>>
+								    			${profile.toString()}
+								    	</option>							   	
+								    </c:forEach>
 								</select><br>   								   								
 								<input type="submit" class="btn btn-md btn-primary" id="save" name="save" value="Enregistrer"/> 
-								<input type="submit" class="btn btn-md btn-primary" id="cancel" name="cancel" value="Annuler"/><br>
+								<a href="${pageContext.request.contextPath}/manager/ListEmploye" class="btn btn-md btn-primary">Annuler</a><br>
 							</fieldset> 
     					</form>
   				 	</div><!-- fin panel body -->					

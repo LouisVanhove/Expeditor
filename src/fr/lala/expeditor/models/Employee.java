@@ -3,6 +3,7 @@ package fr.lala.expeditor.models;
 import java.io.Serializable;
 
 import fr.lala.expeditor.models.enums.Profile;
+import fr.lala.expeditor.utils.HashageSalagePassword;
 
 /**
  * Classe représentant l'entité Employé.
@@ -69,6 +70,7 @@ public class Employee implements Serializable {
 	}
 
 	public void setPassword(String password) {
+		//this.password = HashageSalagePassword.encryptPassword(password);
 		this.password = password;
 	}
 
@@ -104,7 +106,6 @@ public class Employee implements Serializable {
 		this.archived = archived;
 	}
 	
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

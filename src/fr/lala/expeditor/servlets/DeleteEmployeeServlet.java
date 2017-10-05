@@ -43,6 +43,7 @@ public class DeleteEmployeeServlet extends HttpServlet {
 			try {
 				Employee employeeToArchive = serviceE.selectById(identifiant);
 				serviceE.delete(employeeToArchive);
+				System.out.println(employeeToArchive);
 				request.setAttribute("message", "La suppression s'est déroulée avec succès.");
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
@@ -52,6 +53,7 @@ public class DeleteEmployeeServlet extends HttpServlet {
 			}
 		}
 		// Rappel de la servlet ListEmployees
-		request.getRequestDispatcher("/manager/ListEmployees").forward(request, response);
+		response.sendRedirect(request.getContextPath() + "/manager/ListEmployees");
+		//request.getRequestDispatcher("/manager/ListEmployees").forward(request, response);
 	}
 }

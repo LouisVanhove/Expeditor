@@ -21,7 +21,7 @@
         
         <nav id="menu">
         	<ul id="menu-nav">
-            	<li ><span class="glyphicon glyphicon-user"></span> ${User.profile} : ${User.firstName} ${User.lastName}</li>
+            	<li ><span class="glyphicon glyphicon-user"></span> ${User.profile.toString()} : ${User.firstName} ${User.lastName}</li>
             	<li><a href="${pageContext.request.contextPath}/deconnexion">Deconnexion</a></li>
             </ul>
         </nav>

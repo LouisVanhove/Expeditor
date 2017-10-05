@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Logger;
 
 import fr.lala.expeditor.models.Customer;
+import fr.lala.expeditor.utils.MonLogger;
 
 /**
  * Classe permettant de gérer la couche d'accès à la base de données des clients.
@@ -17,12 +19,27 @@ import fr.lala.expeditor.models.Customer;
 public class CustomerDao{
 	
 	private static final String TABLE_CLIENTS = "Clients";
-	
+	private static final String COLUMN_ID = "id";
+	private static final String COLUMN_NAME = "name";
+	private static final String COLUMN_ADDRESS = "address";
+	private static final String COLUMN_ZIP_CODE = "zip_code";
+	private static final String COLUMN_CITY = "city";
+	private static final String COLUMN_ARCHIVED = "archived";
+
 	private static final String REQ_INSERT_CLIENT =
 			"INSERT INTO "
 			+ TABLE_CLIENTS
 			+ " VALUES(?, ?, ?, ?, ?)";
 
+	private static final String REQ_SELECT_CLIENT_BY_ID = 
+			"SELECT name, address, zip_code, city FROM "
+			+ TABLE_CLIENTS
+			+ " WHERE archived = 0"
+			+ " AND id = ?";
+
+	// monlogger retourne un objet de type logger
+	Logger logger = MonLogger.getLogger(this.getClass().getName());
+	
 	/**
 	 * Méthode gérant l'insertion d'un client.
 	 * @param data
@@ -44,8 +61,7 @@ public class CustomerDao{
 			id = generatedKeys.getInt(1);
 		} catch (Exception e) {
 			throw new SQLException(e.getMessage());
-		}
-		
+		}		
 		return id;
 	}
 
@@ -61,22 +77,50 @@ public class CustomerDao{
 		
 	}
 
-
+	/**
+	 * Méthode en charge de sélectionner un client en fonction de son id.
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
 	public Customer selectById(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Customer result = null;
+		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(REQ_SELECT_CLIENT_BY_ID);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+			
+			if(rs.next()){
+				result = itemBuilder(rs);
+			}
+		} catch (SQLException e) {
+			logger.severe(this.getClass().getName()+"#selectId : "+e.getMessage());
+			throw new SQLException("Erreur lors de la sélection d'un client dans la base de données.");
+		}
+		return result;
 	}
-
 
 	public List<Customer> selectAll() throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
+	/**
+	 * Méthode en charge de construire un objet de type Client
+	 * à partir des données de la BDD.
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
 	public Customer itemBuilder(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Customer result = new Customer();
+		result.setId(rs.getInt(COLUMN_ID));
+		result.setName(rs.getString(COLUMN_NAME));
+		result.setAddress(rs.getString(COLUMN_ADDRESS));
+		result.setZipCode(rs.getString(COLUMN_ZIP_CODE));
+		result.setCity(rs.getString(COLUMN_CITY));
+		result.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
+		return result;
 	}
-
 }
