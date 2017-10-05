@@ -16,13 +16,13 @@
     	<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
         
         <div id="logo">
-        	<a href="/connexion"><h4>EXPEDITOR - Gestion de préparation de commandes</h4></a>
+        	<a href="${pageContext.request.contextPath}/"><h4>EXPEDITOR - Gestion de préparation de commandes</h4></a>
         </div>
         
         <nav id="menu">
         	<ul id="menu-nav">
-            	<li >${User.profile.toString()} : ${User.firstName} ${User.lastName}</li>
-            	<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
+            	<li ><span class="glyphicon glyphicon-user"></span> ${User.profile.toString()} : ${User.firstName} ${User.lastName}</li>
+            	<li><a href="${pageContext.request.contextPath}/deconnexion">Deconnexion</a></li>
             </ul>
         </nav>
         

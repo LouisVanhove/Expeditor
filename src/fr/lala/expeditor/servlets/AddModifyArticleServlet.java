@@ -2,7 +2,6 @@ package fr.lala.expeditor.servlets;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +47,7 @@ public class AddModifyArticleServlet extends HttpServlet {
 						// Récupération de l'id de l'article
 						String id = request.getParameter("id_article");
 						Article articleCurrent = articleservice.selectById(Integer.parseInt(id));
-						request.setAttribute("articleCurrent", articleCurrent);
+						request.getSession().setAttribute("articleCurrent", articleCurrent);
 					} catch (NumberFormatException e) {
 						e.printStackTrace();
 					} catch (Exception e) {

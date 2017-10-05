@@ -3,7 +3,6 @@ package fr.lala.expeditor.services;
 import java.util.List;
 
 import fr.lala.expeditor.dao.EmployeeDao;
-import fr.lala.expeditor.models.Article;
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.utils.HashageSalagePassword;
 

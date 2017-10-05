@@ -50,7 +50,8 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			+ " WHERE id=?";
 	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
 			+ " FROM EMPLOYEES e"
-			+ " WHERE e.id=?";
+			+ " WHERE e.archived = 0 "
+			+ " AND e.id=?";
 	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());

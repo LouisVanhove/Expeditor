@@ -14,7 +14,6 @@
 					<div class="panel-body">
 				 		<form id="editEmploye" class="editEmploye" action="${pageContext.request.contextPath}/manager/SaveEmployee" method="post"> 				 		
 				 			<fieldset id="write_employee" name="write_employee" value="Saisie Employé">
-   								<input type="hidden" id="id_employee" name="id_employee" value="${requestScope.currentEmployee.id}"/><br>
    								<label id="login" >Identifiant :</label>
      							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${requestScope.currentEmployee.login}" required /><br>
    								<label id="password" >Mot de passe :</label> 
