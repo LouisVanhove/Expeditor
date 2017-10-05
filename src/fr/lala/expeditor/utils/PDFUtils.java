@@ -19,14 +19,14 @@ import fr.lala.expeditor.models.Order;
 
 public class PDFUtils {
 	static Document document ;
-	
-
+    static int boxWeight = 0 ;
+    static String codeString;
 	
     public static String createDeliveryNote(Order order, String realPath) throws IOException, DocumentException {
         Document document = new Document();
         String nomFichier = "order"+order.getId()+".pdf" ;
         String path = realPath+nomFichier ;
-        System.out.println("Chemin absolu sur le serveur : "+path);
+        codeString = "Order NC"+order.getId()+"-"+order.getCustomer().getName()+"-"+order.getCustomer().getZipCode()+"-"+order.getCustomer().getCity();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
         PdfContentByte canvas = writer.getDirectContent();
@@ -41,7 +41,7 @@ public class PDFUtils {
     }
     
 	/**
-     * Méthode fournissant l'affichage de l'expéditeur
+     * Mï¿½thode fournissant l'affichage de l'expï¿½diteur
      * @param canvas
      */
     public static void setSenderBlock(PdfContentByte canvas){
@@ -52,7 +52,7 @@ public class PDFUtils {
     }
     
     /**
-     * Permet d'ajouter le bloc destinataire au PDF, crée une nouvelle ligne pour chaque String de la liste en paramètres/
+     * Permet d'ajouter le bloc destinataire au PDF, crï¿½e une nouvelle ligne pour chaque String de la liste en paramï¿½tres/
      * @param data
      * @param canvas
      */
@@ -70,12 +70,17 @@ public class PDFUtils {
     }
     
     /**
-     * Ajoute la ligne n° de commande
+     * Ajoute la ligne nï¿½ de commande
      * @param numFacture
      * @param canvas
      */
     private static void setOrderInfo(Order order, PdfContentByte canvas) {
-    	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+sixDigitsOrderNumber(order)), 50, 670, 0);	
+        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande nï¿½ "+order.getId()), 50, 670, 0);
+        BarcodeQRCode qrcode = new BarcodeQRCode(codeString.trim(), 1, 1, null);
+        Image qrcodeImage = qrcode.getImage();
+        qrcodeImage.setAbsolutePosition(450,670);
+        qrcodeImage.scalePercent(200);
+        document.add(qrcodeImage);
 	}
     
 
@@ -87,6 +92,7 @@ public class PDFUtils {
      */
     public static void setOrderDetail(Order data, PdfContentByte canvas){
     	int i = 630 ;
+    	int shippedElementsCount = 0 ;
     	//En tete
     	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("REF"), 50, i, 0);
         ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("DESIGNATION"), 150, i, 0);
@@ -94,52 +100,22 @@ public class PDFUtils {
         ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("QUANTITE"), 480, i, 0);
         i=i-20;
         ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("__________________________________________________________________________"), 50, i, 0);
-        //Génération a partir du tableau : 
+        //Gï¿½nï¿½ration a partir du tableau : 
         i=i-30;
         for (Article c : data.getListArticles()) {
+            boxWeight += a.getWeight();
         	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(String.valueOf(c.getId())), 50, i, 0);
             ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(c.getLabel()), 150, i, 0);
             ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(String.valueOf(c.getWeight())), 350, i, 0);
             ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(String.valueOf(c.getQuantity())), 480, i, 0);
             i = i-20 ;
 		}
+        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("__________________________________________________________________________"), 50, i, 0);
+        i = i-40;
+        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("POIDS COLIS : "+boxWeight), 420, 670, 0);
         
     }
     
-    /**
-     * Méthode en charger de transformer l'id de la commande 
-     * en cnuméro de commande suffisamment long pour le code barre
-     * 
-     * @param order
-     * @return
-     */
-    private static String sixDigitsOrderNumber(Order order) {
-		String result = "1" ;
-    	int zeroToAdd = 0 ;
-		int id = order.getId();
-		
-		if (id < 10) 
-			zeroToAdd = 4 ;
-		else if (id < 100) 
-			zeroToAdd = 3 ;
-		else if (id < 1000) 
-			zeroToAdd = 2 ;
-		else if (id < 10000) 
-			zeroToAdd = 1 ;
-		else if (id < 100000) 
-			zeroToAdd = 0 ;
-		else
-			result = String.valueOf(id);
-	
-		if(zeroToAdd > 0){
-			for (int i = 0 ;  i < zeroToAdd; i++){
-				result = result +"0";
-			}
-		}
-		
-		return result;
-		
 
-	}
 
 }
