@@ -32,6 +32,11 @@ public class ArticleDao implements ICrudDao<Article>{
 	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES SET Label=?, Description=?, Weight=? WHERE Id = ?";
 	private static final String ARCHIVE_ARTICLE = "UPDATE ARTICLES SET Archived=1 WHERE Id = ?";
 	
+	private static final String SELECT_ARTICLES_BYORDER = "SELECT a.id, a.label, a.description, a.weight, a.archived, o.id_order"
+			+ " FROM ARTICLES a "
+			+ " JOIN ARTICLES_ORDERS o ON o.id_article=a.id"
+			+ " WHERE a.archived=0 and o.id_order=?";
+	
 	private static final String TABLE_ARTICLES = "ARTICLES";
 	private static final String REQ_SELECT_ID_BY_LABEL =
 			"SELECT "
@@ -136,6 +141,31 @@ public class ArticleDao implements ICrudDao<Article>{
 
 		try (Connection cnx = ConnectionPool.getConnection()) {
 			PreparedStatement cmd = cnx.prepareStatement(SELECT_ARTICLES);
+
+			ResultSet rs = cmd.executeQuery();
+
+			// tant qu'il trouve quelque chose
+			while (rs.next()) {
+				// Ajout d'un article à la liste
+				listearticles.add(itemBuilder(rs));
+			}
+
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+
+		return listearticles;
+	}
+	
+	/**
+	 * Méthode de sélection de tous les articles en base en fonction du numéro de la commande.
+	 */
+	public List<Article> selectAllByOrder(int idOrder) throws SQLException {
+		List<Article> listearticles = new ArrayList<Article>();
+
+		try (Connection cnx = ConnectionPool.getConnection()) {
+			PreparedStatement cmd = cnx.prepareStatement(SELECT_ARTICLES_BYORDER);
+			cmd.setInt(1, idOrder);
 
 			ResultSet rs = cmd.executeQuery();
 

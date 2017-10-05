@@ -2,6 +2,7 @@ package fr.lala.expeditor.servlets;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.models.Order;
 import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.services.EmployeeService;
+import fr.lala.expeditor.services.OrderService;
 
 /**
  * Servlet implementation class ConnectServlet
@@ -21,6 +24,7 @@ public class ConnectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private RequestDispatcher dispatcher = null;
 	private String redirection =null;
+	private EmployeeService employeeservice = new EmployeeService();
 	public static final String VIEW         = "/WEB-INF/jsp/connection.jsp";
 	public static final String FIELD_LOGIN  = "login";
     public static final String FIELD_PASS   = "password";
@@ -58,7 +62,6 @@ public class ConnectServlet extends HttpServlet {
 		
 		//Creation et initialisation à null d'un objet user de type Employee :
 		Employee user = null;
-		EmployeeService employeeservice = new EmployeeService();
 		
 			try {
 				validateLogin(login);
@@ -81,7 +84,18 @@ public class ConnectServlet extends HttpServlet {
 					request.getSession().setAttribute("User", user);
 				
 					if(user.getProfile()==Profile.MANAGER){ 
-						redirection = "/WEB-INF/jsp/manager/suivicommande.jsp";	
+						OrderService orderservice = new OrderService();
+						List<Order> orderList;
+						List<Employee> employeeList;
+						try {
+							employeeList = employeeservice.selectAllEmployeProcessOrder();
+							orderList = orderservice.selectAll();
+							request.setAttribute("orderList", orderList);
+							request.setAttribute("employeeList", employeeList);
+							redirection = "/WEB-INF/jsp/manager/suivicommande.jsp";	
+						} catch (Exception e) {
+							e.printStackTrace();
+						}	
 					}
 					else if(user.getProfile()==Profile.SHIPPING_CLERK){
 						redirection = "/employee/Commande";	
