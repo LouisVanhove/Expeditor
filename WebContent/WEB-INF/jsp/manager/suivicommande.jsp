@@ -23,8 +23,8 @@
 								<tbody>
 									<c:forEach var="employee" items="${employeeList}">
 										<tr>
-												<td scope="row">${employeeList.lastName} ${employeeList.firstName}</td>
-												<td>${employeeList.resultat}</td>
+												<td scope="row">${employee.lastName} ${employee.firstName}</td>
+												<td>${employee.processedOrder}</td>
 										</tr>	
 									</c:forEach>
 								</tbody>
@@ -52,11 +52,11 @@
 								<tbody>
 									<c:forEach var="commande" items="${orderList}">
 										<tr>
-												<td scope="row">${orderList.id}</td>
-												<td>${orderList.customer}</td>
-												<td>${orderList.orderDate}</td>
-												<td>${orderList.employee}</td>
-												<td>${orderList.state.toString()}</td>
+												<td scope="row">${commande.id}</td>
+												<td>${commande.customer}</td>
+												<td>${commande.orderDate}</td>
+												<td>${commande.employee}</td>
+												<td>${commande.state.toString()}</td>
 										</tr>	
 									</c:forEach>
 								</tbody>

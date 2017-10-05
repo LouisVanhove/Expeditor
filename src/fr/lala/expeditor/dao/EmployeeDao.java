@@ -29,6 +29,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	private static final String COLUMN_FIRSTNAME = "firstname";
 	private static final String COLUMN_PROFILE = "profile";
 	private static final String COLUMN_ARCHIVED = "archived";
+	private static final String COLUMN_PROCESSORDER="total";
 	
 	private static final String SELECT_EMPLOYE_BY_LOGIN = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
 			+ " FROM EMPLOYEES e" 
@@ -170,18 +171,22 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		
 		try(Connection cnx = ConnectionPool.getConnection()){
 			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_EMPLOYEES_PROCESSORDER);
-			
+
 			ResultSet rs = stm.executeQuery();
-			while (rs.next()){
-				result.add(itemBuilder(rs));
+
+			// tant qu'il trouve quelque chose
+			while (rs.next()) {
+				// Ajout d'un employé à la liste
+				result.add(employeBuilder(rs));
 			}
 		} catch (SQLException e) {
 			logger.severe("Erreur : " + e.getMessage());
+			e.printStackTrace();
 		}
+		System.out.println("dao :" + result);
 		return result;
 	}
-	
-	
+
 
 	/**
 	 * Methode de sélection d'un employé en base en fonction de son login et mot de passe.
@@ -212,7 +217,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	}
 
 	/**
-	 * Méthode en charge de récupérer un employé
+	 * Méthode en charge de récupérer un employé.
 	 * @param rs
 	 * @return
 	 * @throws SQLException
@@ -227,6 +232,22 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		employee.setFirstName(rs.getString(COLUMN_FIRSTNAME));
 		employee.setProfile(profileBuilder(rs.getInt(COLUMN_PROFILE)));
 		employee.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
+		return employee;
+	}
+	
+	/**
+	 * Méthode en charge de récupérer un employé avec le total des commandes traitées.
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private Employee employeBuilder(ResultSet rs) throws SQLException {
+		Employee employee = new Employee();
+		employee.setId(rs.getInt(COLUMN_ID));
+		employee.setLastName(rs.getString(COLUMN_NAME));
+		employee.setFirstName(rs.getString(COLUMN_FIRSTNAME));
+		employee.setProcessedOrder(rs.getInt(COLUMN_PROCESSORDER));
+		System.out.println("employee recupere : " + employee);
 		return employee;
 	}
 

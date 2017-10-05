@@ -83,6 +83,7 @@ public class EmployeeService implements ICrudServices<Employee>{
 	 */
 	public List<Employee> selectAllEmployeProcessOrder() throws Exception {
 		List<Employee> result = employeedao.selectAllEmployeProcessOrder();
+		System.out.println("service : " + result);
 		return result;
 	}
 
