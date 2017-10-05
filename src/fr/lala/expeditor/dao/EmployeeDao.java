@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import fr.lala.expeditor.models.Article;
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.utils.HashageSalagePassword;
@@ -70,7 +69,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		try(Connection cnx = ConnectionPool.getConnection()){
 			PreparedStatement stm = cnx.prepareStatement(INSERT_EMPLOYEE, Statement.RETURN_GENERATED_KEYS);
 			stm.setString(1, data.getLogin());
-			stm.setString(2, HashageSalagePassword.encryptPassword(data.getPassword()));
+			stm.setString(2, data.getPassword());
 			stm.setString(3, data.getLastName());
 			stm.setString(4, data.getFirstName());
 			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 2));

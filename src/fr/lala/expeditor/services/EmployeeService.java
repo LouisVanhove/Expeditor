@@ -39,12 +39,7 @@ public class EmployeeService implements ICrudServices<Employee>{
 	 */
 	@Override
 	public void insert(Employee data) throws Exception {
-		if(validateLogin(data.getLastName()) && 
-			validatePassword(data.getPassword()) &&
-			validateLastName(data.getLastName()) &&
-			validateFirstName(data.getFirstName())){
-			employeedao.insert(data);		
-		}
+		employeedao.insert(data);		
 	}
 
 	/**
@@ -52,12 +47,7 @@ public class EmployeeService implements ICrudServices<Employee>{
 	 */
 	@Override
 	public void update(Employee data) throws Exception {
-		if(validateLogin(data.getLastName()) && 
-				validatePassword(data.getPassword()) &&
-				validateLastName(data.getLastName()) &&
-				validateFirstName(data.getFirstName())){
-			employeedao.update(data);
-		}
+		employeedao.update(data);
 	}
 
 	/**
