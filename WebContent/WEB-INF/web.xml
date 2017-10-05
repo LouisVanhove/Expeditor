@@ -174,4 +174,30 @@
     <servlet-name>OrderServlet</servlet-name>
     <url-pattern>/manager/Order</url-pattern>
   </servlet-mapping>
+  <filter>
+    <display-name>ManagerFilter</display-name>
+    <filter-name>ManagerFilter</filter-name>
+    <filter-class>fr.lala.expeditor.filters.ManagerFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ManagerFilter</filter-name>
+    <url-pattern>/manager/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
+  <filter>
+    <display-name>EmployeeFilter</display-name>
+    <filter-name>EmployeeFilter</filter-name>
+    <filter-class>fr.lala.expeditor.filters.EmployeeFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EmployeeFilter</filter-name>
+    <url-pattern>/employee/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
 </web-app>
