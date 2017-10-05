@@ -33,14 +33,12 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("NextOrderServlet#doGet");
 		HttpSession session  = request.getSession(true);
 		Order currentOrder = null ;
-		//Purge de la commande précédente : 
+		
 		if(session.getAttribute("currentOrder") != null){
 			session.setAttribute("currentOrder", null);
 		}
-		
 		
 		try {
 			currentOrder=orderService.getNextOrder();
@@ -56,18 +54,14 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		}
 		session.setAttribute("currentOrder", currentOrder);
 		request.getRequestDispatcher("/WEB-INF/jsp/employee/commande.jsp").forward(request, response);
-		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("NextOrderServlet#doPost");
 		HttpSession session  = request.getSession(true);
 		try {
-			System.out.println("Positionnement de la date de traitement.");
 			orderService.setProcessingDate((Order)session.getAttribute("currentOrder"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
