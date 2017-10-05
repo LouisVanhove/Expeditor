@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import fr.lala.expeditor.dao.CustomerDao;
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.Order;
+import fr.lala.expeditor.models.enums.State;
 import fr.lala.expeditor.services.OrderService;
 
 /**
@@ -43,12 +44,9 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		try {
 			currentOrder=orderService.getNextOrder();
 			Employee emp = (Employee)session.getAttribute("User");
-			System.out.println(emp);
 			currentOrder.setEmployee(emp);
-			System.out.println("Positionnement de l'employé en charge du colis");
-			System.out.println("Id commande : "+currentOrder.getId());
-			System.out.println("Id employé : "+currentOrder.getEmployee().getId());
 			orderService.setShippingClerk(currentOrder);
+			orderService.updateOrderState(currentOrder, State.IN_PROGRESS);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -61,10 +59,11 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session  = request.getSession(true);
+		Order currentOrder = (Order)session.getAttribute("currentOrder");
 		try {
-			orderService.setProcessingDate((Order)session.getAttribute("currentOrder"));
+			orderService.setProcessingDate(currentOrder);
+			orderService.updateOrderState(currentOrder, State.PROCESSED);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		doGet(request, response);

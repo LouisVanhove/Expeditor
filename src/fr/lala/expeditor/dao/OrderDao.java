@@ -20,7 +20,7 @@ import fr.lala.expeditor.models.enums.State;
 import fr.lala.expeditor.utils.MonLogger;
 
 /**
- * Classe en charge de g�rer la couche d'acc�s � la BDD 
+ * Classe en charge de g�rer la couche d'acc�s � la BDD 
  * pour les objets de type Order (commandes).
  */
 public class OrderDao implements ICrudDao<Order> {
@@ -42,7 +42,10 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	private static final String REQ_SET_SHIPPING_CLERK = "UPDATE ORDERS SET id_employee = ? WHERE id=?";
 	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC";
 	private static final String REQ_SET_PROCESSING_DATE = "UPDATE ORDERS SET treatment_date = ? WHERE id = ?";
-	
+	private static final String REQ_UPDATE_ORDER_STATE="UPDATE ORDERS SET state=? WHERE id=?";
+	private static final String REQ_RESET_ORDER = "UPDATE ORDERS SET id_employee = NULL, state=1 WHERE id=?";
+
+
 	private static final String REQ_INSERT_ORDER =
 			"INSERT INTO "
 			+ TABLE_ORDERS
@@ -66,9 +69,12 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	private static final String SELECT_ALL = "SELECT * FROM ORDERS o"
 						+ " JOIN EMPLOYEES e ON e.id = o.id_employee"
 						+ " WHERE state=1";
-	
+
+
+
+
 	/**
-	 * M�thode en charge de r�cup�rer une liste de commandes
+	 * M�thode en charge de r�cup�rer une liste de commandes
 	 * depuis un fichier CSV.
 	 * @param File : fichier CSV
 	 * @return List<Order> : liste de commandes.
@@ -118,15 +124,15 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 
 	
 	/**
-	 * M�thode en charge de fournir la prochaine � traiter par un
-	 * pr�parateur de commande.
+	 * M�thode en charge de fournir la prochaine � traiter par un
+	 * pr�parateur de commande.
 	 * 
-	 * @return La prochaine commande � traiter.
+	 * @return La prochaine commande � traiter.
 	 */
 	public Order selectNextOrder(){
 		Order result = null ;
 		try (Connection cnx = ConnectionPool.getConnection()) {
-			System.out.println("Entr�e dans le try de selectNextOrder");
+			System.out.println("Entr�e dans le try de selectNextOrder");
 			PreparedStatement cmd = cnx.prepareStatement(REQ_GET_NEXT_ORDER);
 			ResultSet rs = cmd.executeQuery();
 			if (rs.next()) {
@@ -140,8 +146,10 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		return result;
 	}
 	
-	/**z
-	 * M�thode en charge d'ins�rer une commande dans la bdd.
+	/**
+	 * Méthode en charge d'insérer une commande dans la base de données.
+	 *
+	 * @param data Commande à insérer dans la base de données.
 	 */
 	@Override
 	public void insert(Order data) throws SQLException {
@@ -154,7 +162,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			preparedStatement.setInt(4, 1);
 			preparedStatement.setInt(5, 0);
 			preparedStatement.executeUpdate();
-			
 			preparedStatement = connection.prepareStatement(REQ_INSERT_ARTICLE_ORDER);
 			preparedStatement.setInt(1, data.getId());
 			for (Article article : data.getListArticles()) {
@@ -188,7 +195,9 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	}
 
 	/**
-	 * methode en charge de s�lectionner la liste des commandes � traiter.
+	 * Méthode en charge de sélectionner la liste des commandes à traiter.
+	 *
+	 * @return Liste de toutes les commandes à traiter.
 	 */
 	@Override
 	public List<Order> selectAll() throws SQLException {
@@ -196,15 +205,10 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 
 		try (Connection cnx = ConnectionPool.getConnection()) {
 			PreparedStatement cmd = cnx.prepareStatement(SELECT_ALL);
-
 			ResultSet rs = cmd.executeQuery();
-
-			// tant qu'il trouve quelque chose
 			while (rs.next()) {
-				// Ajout d'une commande � la liste
 				orderList.add(itemBuilder(rs));
 			}
-
 		} catch (SQLException e) {
 			logger.severe("Erreur : " + e.getMessage());
 		}
@@ -213,8 +217,10 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 
 	
 	/**
-	 * Fonction permettant la construction d'un objet Order � partir d'un resultset
-	 * D�finition incompl�te.
+	 * Fonction permettant la construction d'un objet Order à partir d'un resultset
+	 *
+	 * @param rs Curseur positionné sur la ligne à traiter.
+	 * @return Commande construite depuis la position courante du curseur.
 	 */
 	@Override
 	public Order itemBuilder(ResultSet rs) throws SQLException {
@@ -233,10 +239,18 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		return result;
 	}
 
+	/**
+	 * Méthode en charge de modifier une commande afin de lui affecter
+	 * un préparateur.
+	 *
+	 * @param data Commande à modifer.
+	 * @param clerk Préparateur de commandes à affecter.
+	 * @throws SQLException
+	 */
 	public void setShippingClerk(Order data, Employee clerk) throws SQLException {
 		try (Connection connection = ConnectionPool.getConnection()){
 			System.out.println("OrderDao#setShippingClerk#try");
-			System.out.println("Id employ� : "+clerk.getId());
+			System.out.println("Id employ� : "+clerk.getId());
 			System.out.println("Id commande : "+data.getId());
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_SHIPPING_CLERK);
 			preparedStatement.setInt(1, clerk.getId());
@@ -247,7 +261,13 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		}
 		
 	}
-	
+
+	/**
+	 * Méthode en charge de mettre à jour la date de traitement d'une commande.
+	 *
+	 * @param data Commande à modifier.
+	 * @throws SQLException
+	 */
 	public void setProcessingDate(Order data) throws SQLException {
 		try (Connection connection = ConnectionPool.getConnection()){
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_PROCESSING_DATE);
@@ -258,6 +278,43 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			throw new SQLException(e.getMessage());
 		}
 		
+	}
+
+	/**
+	 * Méthode permettant de mettre à jour l'état d'avancement d'une commande. Les différents
+	 * états possibles sont contenus dans la table STATES de la base de données associée.
+	 *
+	 * @param data Commande dont l"état doit être modifié
+	 * @param state Etat à affecter à la commande.
+	 * @throws SQLException
+	 */
+	public void updateOrderState(Order data, State state) throws SQLException {
+		try (Connection connection = ConnectionPool.getConnection()){
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_UPDATE_ORDER_STATE);
+			preparedStatement.setInt(1, data.getId());
+			preparedStatement.setInt(1, state.getId());
+			preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}
+	}
+
+	/**
+	 * Méthode en charge de remettre à zero une commande attribuée à un préparateur
+	 * lors de la deconnexion de celui ci. Sans cette modification, la commande attribuée
+	 * mais non traitée ne serait jamais proposée de nouveau à un préparateur.
+	 *
+	 * @param data Commande à renvoyer dans la pile à traiter.
+	 * @throws SQLException
+	 */
+	public void resetOrder(Order data) throws SQLException {
+		try (Connection connection = ConnectionPool.getConnection()){
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_RESET_ORDER);
+			preparedStatement.setInt(1, data.getId());
+			preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}
 	}
 
 

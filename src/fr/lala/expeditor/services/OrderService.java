@@ -9,9 +9,10 @@ import fr.lala.expeditor.dao.CustomerDao;
 import fr.lala.expeditor.dao.OrderDao;
 import fr.lala.expeditor.models.Article;
 import fr.lala.expeditor.models.Order;
+import fr.lala.expeditor.models.enums.State;
 
 /**
- * Service gérant les commandes.
+ * Service gï¿½rant les commandes.
  * @author lajzenberg2017
  *
  */
@@ -21,7 +22,7 @@ public class OrderService implements ICrudServices<Order> {
 	private List<Order> _orderList;
 	
 	/**
-	 * Méthode permettant de gérer l'importation des commandes.
+	 * Mï¿½thode permettant de gï¿½rer l'importation des commandes.
 	 * @param value
 	 * @throws IOException
 	 * @throws SQLException
@@ -38,8 +39,8 @@ public class OrderService implements ICrudServices<Order> {
 	}
 	
 	/**
-	 * Méthode en charge de fournir la prochaine commande à traiter 
-	 * @return Order à traiter.
+	 * Mï¿½thode en charge de fournir la prochaine commande ï¿½ traiter 
+	 * @return Order ï¿½ traiter.
 	 */
 	public Order getNextOrder(){
 		Order result = null ; 
@@ -67,7 +68,7 @@ public class OrderService implements ICrudServices<Order> {
 	}
 
 	/**
-	 * Selection de la liste de toutes les commandes à traiter.
+	 * Selection de la liste de toutes les commandes ï¿½ traiter.
 	 */
 	@Override
 	public List<Order> selectAll() throws Exception {
@@ -91,6 +92,13 @@ public class OrderService implements ICrudServices<Order> {
 	
 	public void setProcessingDate(Order data) throws SQLException{
 		new OrderDao().setProcessingDate(data);
+	}
+
+	public void updateOrderState(Order data, State state) throws SQLException {
+		new OrderDao().updateOrderState(data, state);
+	}
+	public void resetOrder(Order data) throws SQLException {
+		new OrderDao().resetOrder(data);
 	}
 	
 }

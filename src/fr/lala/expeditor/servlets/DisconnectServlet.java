@@ -1,5 +1,8 @@
 package fr.lala.expeditor.servlets;
 
+import fr.lala.expeditor.services.OrderService;
+import fr.lala.expeditor.models.Order;
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +32,9 @@ public class DisconnectServlet extends HttpServlet {
 		try { 
 			/* Recuperation et destruction de la session en cours */
 	        HttpSession session = request.getSession();
+	        if(session.getAttribute("currentOrder") != null){
+				new OrderService().resetOrder((Order)session.getAttribute("currentOrder"));
+			}
 	        session.invalidate();
 	        redirection =  "/connexion";		
 		} catch(Exception e){	
