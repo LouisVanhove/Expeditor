@@ -91,7 +91,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			stm.setString(2, data.getPassword());
 			stm.setString(3, data.getLastName());
 			stm.setString(4, data.getFirstName());
-			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 0));
+			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 2));
 			stm.setInt(6, data.getId());
 			stm.executeUpdate();			
 		} catch (SQLException e) {

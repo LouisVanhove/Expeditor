@@ -38,7 +38,7 @@
 								</c:forEach>
 							</select><br> 
 							<input type="submit" class="btn btn-md btn-primary" id="save" name="save" value="Enregistrer" /> 
-							<a href="${pageContext.request.contextPath}/manager/ListEmploye" class="btn btn-md btn-primary">Annuler</a><br>
+							<a href="${pageContext.request.contextPath}/manager/ListEmployees" class="btn btn-md btn-primary">Annuler</a><br>
 						</fieldset>
 					</form>
 				</div>

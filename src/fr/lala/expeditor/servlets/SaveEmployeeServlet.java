@@ -52,24 +52,22 @@ public class SaveEmployeeServlet extends HttpServlet {
 		if (request.getParameter("save") != null) {
 			// Validation des valeurs du formulaire:
 			String idEmploye = request.getParameter("id_employee");
-			System.out.println(idEmploye);
 			String enteredLogin = request.getParameter("txtboxLogin").trim();
 			String enteredPassword = request.getParameter("txtboxPassword").trim();
 			String enteredLastName = request.getParameter("txtboxLastName").trim();
 			String enteredFirstName = request.getParameter("txtboxFirstName").trim();
-			errors = validateFields(enteredPassword, enteredLastName, enteredFirstName);
-			System.out.println(errors.toString());
+			errors = validateFields(enteredLogin, enteredPassword, enteredLastName, enteredFirstName);
+			
 			// Si le Map d'erreurs est vide (donc champs valides)
 			if (errors.isEmpty()) {
 				// Si l'id est vide (donc employé inexistant en BDD), on le crée:
 				if ("".equals(idEmploye)) {
 					try {
-						try {
-							validateLogin(enteredLogin);
-						} catch (Exception e) {
-							errors.put("Identifiant", e.getMessage());
-						}
-						System.out.println("je rentre dans l'ajout");
+						for (Employee employee : employeeDao.selectAll()) {
+							if (enteredLogin.equals(employee.getLogin())) {
+								errors.put("Login", new Exception().getMessage());
+							}
+						} 
 						serviceE.insert(buildEmployee(request));
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -78,13 +76,9 @@ public class SaveEmployeeServlet extends HttpServlet {
 					// Sinon, on modifie l'employé en BDD:
 				} else {
 					try {
-						System.out.println("je rentre dans la modif");
 						Employee employeeToModify = buildEmployee(request);
-						System.out.println(employeeToModify);
 						employeeToModify.setId(Integer.parseInt(idEmploye));
-						System.out.println(employeeToModify.getId());
 						serviceE.update(employeeToModify);
-						System.out.println(employeeToModify);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -94,36 +88,27 @@ public class SaveEmployeeServlet extends HttpServlet {
 			} else {
 				request.setAttribute("errors", errors);
 				request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request, response);;
-			}
-			
+			}			
 		}
 	}
 
 	/**
-	 * Méthode de construction d'un objet Employé à partir des données du
-	 * formulaire.
-	 * 
+	 * Méthode de construction d'un objet Employé à partir des données du formulaire.
 	 * @param request
 	 * @return
 	 */
 	private Employee buildEmployee(HttpServletRequest request) {
 		Employee employee = new Employee();
 		employee.setLogin(request.getParameter("txtboxLogin").trim());
-		System.out.println(employee.getLogin());
 		employee.setPassword(HashageSalagePassword.encryptPassword(request.getParameter("txtboxPassword").trim()));
-		System.out.println(employee.getPassword());
 		employee.setLastName(request.getParameter("txtboxLastName").trim());
-		System.out.println(employee.getLastName());
 		employee.setFirstName(request.getParameter("txtboxFirstName").trim());
-		System.out.println(employee.getFirstName());
 		employee.setProfile(buildProfile(request));
-		System.out.println(employee.getPassword().toString());
 		return employee;
 	}
 
 	/**
 	 * Méthode en charge de récupérer le profil de l'employé
-	 * 
 	 * @param id_profile
 	 * @return
 	 */
@@ -132,7 +117,20 @@ public class SaveEmployeeServlet extends HttpServlet {
 		return profile;
 	}
 
-	private Map<String, String> validateFields(String password, String lastName, String firstName) {
+	/**
+	 * Méthode pour valider les champs identifiant, mot de passe, nom et prenom.
+	 * @param login
+	 * @param password
+	 * @param lastName
+	 * @param firstName
+	 * @return
+	 */
+	private Map<String, String> validateFields(String login, String password, String lastName, String firstName) {
+		try {
+			validateLogin(login);
+		} catch (Exception e) {
+			errors.put("Login", e.getMessage());
+		}
 		try {
 			validatePassword(password);
 		} catch (Exception e) {
@@ -157,11 +155,6 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 * @throws Exception
 	 */
 	private void validateLogin(String login) throws Exception {
-		for (Employee employee : employeeDao.selectAll()) {
-			if (login.equals(employee.getLogin())) {
-				throw new Exception("Cet identifiant est déjà utilisé, merci d'en choisir un nouveau.");
-			}
-		} 
 		if (login == null || login.trim().length() == 0) {
 			throw new Exception("Merci de saisir un identifiant.");
 		} else if(login.trim().length()<1 || login.trim().length()>30){
