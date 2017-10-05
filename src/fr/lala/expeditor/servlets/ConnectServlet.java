@@ -24,6 +24,7 @@ public class ConnectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private RequestDispatcher dispatcher = null;
 	private String redirection =null;
+	private EmployeeService employeeservice = new EmployeeService();
 	public static final String VIEW         = "/WEB-INF/jsp/connection.jsp";
 	public static final String FIELD_LOGIN  = "login";
     public static final String FIELD_PASS   = "password";
@@ -61,7 +62,6 @@ public class ConnectServlet extends HttpServlet {
 		
 		//Creation et initialisation à null d'un objet user de type Employee :
 		Employee user = null;
-		EmployeeService employeeservice = new EmployeeService();
 		
 			try {
 				validateLogin(login);
@@ -86,9 +86,12 @@ public class ConnectServlet extends HttpServlet {
 					if(user.getProfile()==Profile.MANAGER){ 
 						OrderService orderservice = new OrderService();
 						List<Order> orderList;
+						List<Employee> employeeList;
 						try {
+							employeeList = employeeservice.selectAllEmployeProcessOrder();
 							orderList = orderservice.selectAll();
 							request.setAttribute("orderList", orderList);
+							request.setAttribute("employeeList", employeeList);
 							redirection = "/WEB-INF/jsp/manager/suivicommande.jsp";	
 						} catch (Exception e) {
 							e.printStackTrace();

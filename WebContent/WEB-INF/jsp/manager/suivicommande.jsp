@@ -21,10 +21,10 @@
 										</tr>
 									</thead>
 								<tbody>
-									<c:forEach var="employee" items="${statemployee}">
+									<c:forEach var="employee" items="${employeeList}">
 										<tr>
-												<td scope="row">${employee.lastName} ${employee.firstName}</td>
-												<td>${employe.resultat}</td>
+												<td scope="row">${employeeList.lastName} ${employeeList.firstName}</td>
+												<td>${employeeList.resultat}</td>
 										</tr>	
 									</c:forEach>
 								</tbody>

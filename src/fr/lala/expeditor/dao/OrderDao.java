@@ -62,7 +62,9 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			+ TABLE_ARTICLES_ORDERS
 			+ " VALUES(?, ?, ?)";
 	
-	private static final String SELECT_ALL = "SELECT * FROM TABLE_ORDERS WHERE COLUMN_ID_EMPLOYEE=0";
+	private static final String SELECT_ALL = "SELECT * FROM ORDERS o"
+						+ " JOIN EMPLOYEES e ON e.id = o.id_employee"
+						+ " WHERE state=1";
 	
 	/**
 	 * Mï¿½thode en charge de récupérer une liste de commandes
