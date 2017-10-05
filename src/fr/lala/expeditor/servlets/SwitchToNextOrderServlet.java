@@ -43,6 +43,8 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		}
 		
 		//Order currentOrder=new OrderService().getNextOrder();
+		
+		//DEBUT BOUCHON
 		Customer customer = new Customer();
 		customer.setName("Aurélia Delauné");
 		customer.setAddress("Palais de l'Elysée");
@@ -52,7 +54,7 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		List<Article> articles = new ArrayList<>();
 		for(int i=0; i <10; i++){
 			Article a = new Article();
-			a.setId(12);
+			a.setId(12+i);
 			a.setLabel("Article n°"+i);
 			a.setWeight(i*i);
 			a.setQuantity(i+2);
@@ -64,6 +66,8 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 		currentOrder.setOrderDate(new Date());
 		currentOrder.setListArticles(articles);
 		currentOrder.setCustomer(customer);
+		//Fin BOUCHON
+		
 		session.setAttribute("currentOrder", currentOrder);
 		request.getRequestDispatcher("/WEB-INF/jsp/employee/commande.jsp").forward(request, response);
 		

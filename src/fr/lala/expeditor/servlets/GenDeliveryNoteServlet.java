@@ -35,44 +35,25 @@ public class GenDeliveryNoteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Customer customer = new Customer();
-		customer.setName("Aurélia Delauné");
-		customer.setAddress("Palais de l'Elysée");
-		customer.setZipCode("85000");
-		customer.setCity("Baton Rouge");
-		List<Article> articles = new ArrayList<>();
-		for(int i=0; i <10; i++){
-			Article a = new Article();
-			a.setId(12);
-			a.setLabel("Article n°"+i);
-			a.setWeight(i*i);
-			
-			articles.add(a);
-		}
+		Order currentOrder = null ;
 		
-		Order order = new Order();
-		order.setId(8770);
-		order.setOrderDate(new Date());
-		order.setListArticles(articles);
-		order.setCustomer(customer);
-		String path = null ;
+		if(request.getSession().getAttribute("currentOrder") instanceof Order){
+			currentOrder = (Order)request.getSession().getAttribute("currentOrder");
+		};
+		
 		String realPath = request.getSession().getServletContext().getRealPath("/")+"pdf/" ;
-		System.out.println(realPath);
 		String nomFichier = null ;
-		request.setAttribute("order", order);
+		request.setAttribute("order", currentOrder);
 		try {
-			nomFichier = PDFUtils.createDeliveryNote(order,realPath );
+			nomFichier = PDFUtils.createDeliveryNote(currentOrder,realPath );
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(nomFichier);
 		if(nomFichier != null){
-			
-			//path = "file://"+path;
-			System.out.println("Nom du fichier : " + path);
+			String path = "/pdf/"+nomFichier;
 			request.setAttribute("path", request.getContextPath()+"/pdf/"+nomFichier);
-			request.getRequestDispatcher("/pdf/").forward(request, response);
+			request.getRequestDispatcher(path).forward(request, response);
 		}
 		
 	}
@@ -82,7 +63,7 @@ public class GenDeliveryNoteServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -76,27 +76,6 @@ public class PDFUtils {
      */
     private static void setOrderInfo(Order order, PdfContentByte canvas) {
     	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+order.getId()), 50, 670, 0);	
-    	/*
-    	BarcodeEAN codeEAN = new BarcodeEAN();
-    	codeEAN.setCodeType(Barcode.EAN13);
-    	codeEAN.setCode(sixDigitsOrderNumber(order));
-    	Image imageEAN = codeEAN.createImageWithBarcode(canvas, null, null);
-    	imageEAN.setWidthPercentage(5);
-    	imageEAN.setAbsolutePosition(350, 670);
-    	try {
-			document.add(imageEAN);
-		} catch (DocumentException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-              
-            try {
-				document.add(imageEAN);
-			} catch (DocumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
 	}
     
 
