@@ -84,17 +84,8 @@ public class ConnectServlet extends HttpServlet {
 					request.getSession().setAttribute("User", user);
 				
 					if(user.getProfile()==Profile.MANAGER){ 
-						OrderService orderService = new OrderService();
-						List<Order> orderList;
-						List<Employee> employeeList;
 						try {
-							employeeList = employeeservice.selectAllEmployeProcessOrder();
-							orderList = orderService.selectAll();
-							System.out.println(orderList);
-							System.out.println(employeeList);
-							request.setAttribute("orderList", orderList);
-							request.setAttribute("employeeList", employeeList);
-							redirection = "/WEB-INF/jsp/manager/suivicommande.jsp";	
+							redirection = "/manager/Order";	
 						} catch (Exception e) {
 							e.printStackTrace();
 						}	

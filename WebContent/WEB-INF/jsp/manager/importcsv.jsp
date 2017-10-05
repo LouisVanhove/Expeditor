@@ -6,21 +6,21 @@
 
 	<section class="section">
 		<div class="container">
-				<div class="col-sm-12 col-xs-12">
+			<div class="row">
+				<div class="col-sm-6 col-xs-6">
 					<h3>Importation des commandes</h3>
-					<form action="${pageContext.request.contextPath}/manager/import" method="post" enctype="multipart/form-data" acceptcharset="UTF-8">
-						<fieldset>
-							<div>
-							   <label for="file">Fichier CSV à importer : </label>
-							   <input type="file" id="file" name="file" accept=".csv">
-							</div>
-							<div>
-						  	<input type="submit" class="button" value="Importer les commandes">
+						<div class="panel-body">
+							<form action="${pageContext.request.contextPath}/manager/import" method="post" enctype="multipart/form-data" acceptcharset="UTF-8">
+								<fieldset>
+							   		<label for="file">Fichier CSV à importer : </label>
+							   		<input type="file" id="file" name="file" class="form-control" accept=".csv"></br>
+						  			<input type="submit" class="btn btn-md btn-primary" value="Importer les commandes"></br></br>
+								</fieldset>
+							</form>
+							<div>${import_message}</div>
 						</div>
-						</fieldset>
-					</form>
-					<div>${import_message}</div>
 				</div>
-		</div>
-	</section>
+			</div><!-- fin row -->	
+		</div><!-- fin container --> 
+	</section><!-- fin section -->
 <c:import url="/WEB-INF/fragments/footer.jsp"/>

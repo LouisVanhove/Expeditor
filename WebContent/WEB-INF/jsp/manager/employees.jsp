@@ -8,7 +8,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-12 col-xs-12">
-			<h1>Gestion Employés</h1>
+			<h3>Gestion Employés</h3>
 
 			<c:if test="${listEmployees.size() < 1}">
 				<div class="ligne-employe">

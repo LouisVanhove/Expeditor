@@ -53,9 +53,9 @@
 									<c:forEach var="commande" items="${orderList}">
 										<tr>
 												<td scope="row">${commande.id}</td>
-												<td>${commande.customer}</td>
+												<td>${commande.customer.name}</td>
 												<td>${commande.orderDate}</td>
-												<td>${commande.employee}</td>
+												<td>${commande.employee.lastName} ${commande.employee.firstName}</td>
 												<td>${commande.state.toString()}</td>
 										</tr>	
 									</c:forEach>

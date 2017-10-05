@@ -172,7 +172,7 @@ public class ArticleDao implements ICrudDao<Article>{
 			// tant qu'il trouve quelque chose
 			while (rs.next()) {
 				// Ajout d'un article à la liste
-				listearticles.add(itemBuilder(rs));
+				listearticles.add(articlequantiteBuilder(rs));
 			}
 
 		} catch (SQLException e) {
@@ -182,6 +182,7 @@ public class ArticleDao implements ICrudDao<Article>{
 		return listearticles;
 	}
 
+	
 	/**
 	 * Méthode permettant de récupérer l'identifiant (id) d'un article
 	 * d'après sa désignation (label).
@@ -217,7 +218,24 @@ public class ArticleDao implements ICrudDao<Article>{
 		article.setDescription(rs.getString(COLUMN_DESCRIPTION));
 		article.setWeight(rs.getInt(COLUMN_WEIGHT));
 		article.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
+		return article;
+	}
+	
+	/**
+	 * Méthode en charge de récupérer un article avec sa quantité.
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private Article articlequantiteBuilder(ResultSet rs) throws SQLException {
+		Article article = new Article();
+		article.setId(rs.getInt(COLUMN_ID));
+		article.setLabel(rs.getString(COLUMN_LABEL));
+		article.setDescription(rs.getString(COLUMN_DESCRIPTION));
+		article.setWeight(rs.getInt(COLUMN_WEIGHT));
+		article.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
 		article.setQuantity(rs.getInt("quantity"));
 		return article;
 	}
+
 }
