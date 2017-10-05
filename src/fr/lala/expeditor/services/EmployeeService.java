@@ -66,6 +66,15 @@ public class EmployeeService implements ICrudServices<Employee>{
 		List<Employee> result = employeedao.selectAll();
 		return result;
 	}
+	
+	/**
+	 * Méthode pour afficher l'ensemble des employés non archivés.
+	 * avec leur nombre de commandes traitées à la date du jour.
+	 */
+	public List<Employee> selectAllEmployeProcessOrder() throws Exception {
+		List<Employee> result = employeedao.selectAllEmployeProcessOrder();
+		return result;
+	}
 
 	/**
 	 * Méthode pour sélectionner un employé donné.

@@ -1,26 +1,22 @@
 package fr.lala.expeditor.dao;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.opencsv.CSVReader;
-
-import fr.lala.expeditor.models.Article;
-import fr.lala.expeditor.models.Customer;
-import fr.lala.expeditor.models.Order;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
+
+import fr.lala.expeditor.models.Article;
+import fr.lala.expeditor.models.Customer;
+import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.models.Order;
+import fr.lala.expeditor.models.enums.State;
 import fr.lala.expeditor.utils.MonLogger;
 
 /**
@@ -43,18 +39,9 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
 	private static final String SEPARATOR = ",";
 	private static final String DATE_FORM = "dd/MM/yyyy HH:mm:ss";
-	
-	private static final String REQ_GET_NEXT_ORDER =
-			"SELECT TOP 1"
-			+" *" 
-			+" FROM "
-			+ TABLE_ORDERS
-			+" WHERE" 
-			+ COLUMN_ID_EMPLOYEE +" IS NULL"
-			+" AND "
-			+ COLUMN_ARCHIVED +"=0"
-			+" ORDER BY"
-			+ COLUMN_ORDER_DATE+" ASC";
+	private static final String REQ_SET_SHIPPING_CLERK = "UPDATE ORDERS SET id_employee = ? WHERE id=?";
+	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC";
+	private static final String REQ_SET_PROCESSING_DATE = "UPDATE ORDERS SET treatment_date = ? WHERE id = ?";
 	
 	private static final String REQ_INSERT_ORDER =
 			"INSERT INTO "
@@ -75,6 +62,10 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			"INSERT INTO "
 			+ TABLE_ARTICLES_ORDERS
 			+ " VALUES(?, ?, ?)";
+	
+	private static final String SELECT_ALL = "SELECT * FROM ORDERS o"
+						+ " JOIN EMPLOYEES e ON e.id = o.id_employee"
+						+ " WHERE state=1";
 	
 	/**
 	 * Mï¿½thode en charge de récupérer une liste de commandes
@@ -135,6 +126,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	public Order selectNextOrder(){
 		Order result = null ;
 		try (Connection cnx = ConnectionPool.getConnection()) {
+			System.out.println("Entrée dans le try de selectNextOrder");
 			PreparedStatement cmd = cnx.prepareStatement(REQ_GET_NEXT_ORDER);
 			ResultSet rs = cmd.executeQuery();
 			if (rs.next()) {
@@ -144,10 +136,11 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		} catch (SQLException e) {
 			logger.severe("Erreur : " + e.getMessage());
 		}
+		System.out.println("Next order : " +result);
 		return result;
 	}
 	
-	/**
+	/**z
 	 * Méthode en charge d'insérer une commande dans la bdd.
 	 */
 	@Override
@@ -180,6 +173,8 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		
 	}
 
+
+	
 	@Override
 	public void delete(Order data) throws SQLException {
 		// TODO Auto-generated method stub
@@ -192,10 +187,28 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		return null;
 	}
 
+	/**
+	 * methode en charge de sélectionner la liste des commandes à traiter.
+	 */
 	@Override
 	public List<Order> selectAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orderList = new ArrayList<Order>();
+
+		try (Connection cnx = ConnectionPool.getConnection()) {
+			PreparedStatement cmd = cnx.prepareStatement(SELECT_ALL);
+
+			ResultSet rs = cmd.executeQuery();
+
+			// tant qu'il trouve quelque chose
+			while (rs.next()) {
+				// Ajout d'une commande à la liste
+				orderList.add(itemBuilder(rs));
+			}
+
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return orderList;
 	}
 
 	
@@ -206,11 +219,48 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	@Override
 	public Order itemBuilder(ResultSet rs) throws SQLException {
 		Order result = new Order();
+		System.out.println(rs.getInt(COLUMN_ID_CUSTOMER));
+		Customer c = new CustomerDao().selectById(rs.getInt(COLUMN_ID_CUSTOMER));
+		Employee e = new EmployeeDao().selectById(rs.getInt(COLUMN_ID_EMPLOYEE));
+		result.setCustomer(c);
 		result.setId(rs.getInt(COLUMN_ID));
 		result.setOrderDate(rs.getDate(COLUMN_ORDER_DATE));
+		result.setProcessingDate(rs.getDate(COLUMN_TREATMENT_DATE));
+		result.setEmployee(e);
+		result.setState(State.values()[rs.getInt(COLUMN_STATE)-1]);
 		result.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
 	
 		return result;
 	}
+
+	public void setShippingClerk(Order data, Employee clerk) throws SQLException {
+		try (Connection connection = ConnectionPool.getConnection()){
+			System.out.println("OrderDao#setShippingClerk#try");
+			System.out.println("Id employé : "+clerk.getId());
+			System.out.println("Id commande : "+data.getId());
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_SHIPPING_CLERK);
+			preparedStatement.setInt(1, clerk.getId());
+			preparedStatement.setInt(2, data.getId());
+			preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}
+		
+	}
+	
+	public void setProcessingDate(Order data) throws SQLException {
+		try (Connection connection = ConnectionPool.getConnection()){
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_PROCESSING_DATE);
+			preparedStatement.setDate(1, new java.sql.Date(new Date().getTime()));
+			preparedStatement.setInt(2, data.getId());
+			preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}
+		
+	}
+
+
+
 
 }

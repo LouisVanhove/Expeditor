@@ -31,6 +31,20 @@ public class ArticleService {
 	}
 	
 	/**
+	 * Selection de la liste de tous les Articles en fonction du numéro de commande.
+	 * 
+	 * @return une liste
+	 */
+	public List<Article> selectAllByOrder(int idOrder){
+		try {
+			_listeArticles = articledao.selectAllByOrder(idOrder);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return _listeArticles;
+	}
+	
+	/**
 	 * Selection d'un article en fonction de son identifiant.
 	 * 
 	 * @param id

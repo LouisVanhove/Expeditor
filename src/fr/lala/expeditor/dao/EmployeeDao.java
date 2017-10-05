@@ -51,6 +51,11 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			+ " FROM EMPLOYEES e"
 			+ " WHERE e.archived = 0 "
 			+ " AND e.id=?";
+	private static final String SELECT_ALL_EMPLOYEES_PROCESSORDER ="SELECT e.id, e.name, e.firstname, COUNT(*) AS total"
+			+ " FROM EMPLOYEES e JOIN ORDERS o ON o.id_employee = e.id"
+			+ " WHERE e.[profile] = 2 AND o.[state] = 3 AND o.treatment_date = cast(GETDATE() as date)"
+			+ " AND e.archived = 0 AND o.archived = 0"
+			+ " GROUP BY e.id, e.name, e.firstname";
 	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
@@ -152,6 +157,30 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		}
 		return result;
 	}
+	
+	/**
+	 * Méthode retournant la liste des employés (préparateurs de commande) 
+	 * travaillant dans l'entreprise (archived = 0)
+	 * avec leur nombre de commandes traitées à la date du jour.
+	 * @return liste d'employés actifs.
+	 */
+	public List<Employee> selectAllEmployeProcessOrder() throws SQLException {
+		List<Employee> result = new ArrayList<>();
+		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_EMPLOYEES_PROCESSORDER);
+			
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()){
+				result.add(itemBuilder(rs));
+			}
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return result;
+	}
+	
+	
 
 	/**
 	 * Methode de sélection d'un employé en base en fonction de son login et mot de passe.

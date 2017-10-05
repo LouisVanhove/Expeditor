@@ -75,28 +75,7 @@ public class PDFUtils {
      * @param canvas
      */
     private static void setOrderInfo(Order order, PdfContentByte canvas) {
-    	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+order.getId()), 50, 670, 0);	
-    	/*
-    	BarcodeEAN codeEAN = new BarcodeEAN();
-    	codeEAN.setCodeType(Barcode.EAN13);
-    	codeEAN.setCode(sixDigitsOrderNumber(order));
-    	Image imageEAN = codeEAN.createImageWithBarcode(canvas, null, null);
-    	imageEAN.setWidthPercentage(5);
-    	imageEAN.setAbsolutePosition(350, 670);
-    	try {
-			document.add(imageEAN);
-		} catch (DocumentException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-              
-            try {
-				document.add(imageEAN);
-			} catch (DocumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
+    	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+sixDigitsOrderNumber(order)), 50, 670, 0);	
 	}
     
 
@@ -147,14 +126,14 @@ public class PDFUtils {
 			zeroToAdd = 2 ;
 		else if (id < 10000) 
 			zeroToAdd = 1 ;
-		else if (id < 10000) 
+		else if (id < 100000) 
 			zeroToAdd = 0 ;
 		else
 			result = String.valueOf(id);
 	
 		if(zeroToAdd > 0){
 			for (int i = 0 ;  i < zeroToAdd; i++){
-				result += "0";
+				result = result +"0";
 			}
 		}
 		

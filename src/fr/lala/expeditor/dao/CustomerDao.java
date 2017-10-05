@@ -32,7 +32,7 @@ public class CustomerDao{
 			+ " VALUES(?, ?, ?, ?, ?)";
 
 	private static final String REQ_SELECT_CLIENT_BY_ID = 
-			"SELECT name, address, zip_code, city FROM "
+			"SELECT * FROM "
 			+ TABLE_CLIENTS
 			+ " WHERE archived = 0"
 			+ " AND id = ?";

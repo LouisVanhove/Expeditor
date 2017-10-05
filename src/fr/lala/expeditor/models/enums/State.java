@@ -10,7 +10,23 @@ package fr.lala.expeditor.models.enums;
  *
  */
 public enum State {
-	PENDING,
-	IN_PROGRESS,
-	PROCESSED
+	PENDING(1, "En Attente"),
+	IN_PROGRESS(2, "En cours de traitement"),
+	PROCESSED(3, "Traité");
+	
+	private int id;
+	private String label;
+	
+	State(int id, String label){
+		this.id=id;
+		this.label=label;
+	}
+	
+	public int getId(){
+		return this.id;
+	}
+	
+	public String toString(){
+		return this.label;
+	}
 }

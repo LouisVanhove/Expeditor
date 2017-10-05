@@ -23,7 +23,13 @@ public class Employee implements Serializable {
 	private String firstName;
 	private Profile profile;
 	private boolean archived;
+	private int processedOrder;
 	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	/**
 	 * Constructeur par défaut.
 	 */
@@ -104,6 +110,14 @@ public class Employee implements Serializable {
 
 	public void setArchived(boolean archived) {
 		this.archived = archived;
+	}
+	
+	public int getProcessedOrder() {
+		return processedOrder;
+	}
+
+	public void setProcessedOrder(int processedOrder) {
+		this.processedOrder = processedOrder;
 	}
 	
 	@Override

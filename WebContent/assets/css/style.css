@@ -215,6 +215,7 @@ nav#menu #menu-nav li a:hover {
    footer
 ================================================== */
 footer {
+	margin-top : 50px ;
 	padding: 10px 0;
 	background-color: #000000;
 	color: white;
@@ -235,4 +236,16 @@ footer {
  */
 .recap-client{
 	margin-top : 30px;
+	margin-bottom : 20px ;
+	padding : 10px ;
+	background-color: silver;
+	border-radius: 4px;
+}
+
+.completed-line{
+	background-color: #E6FFE6 ;
+}
+
+.uncompleted-line{
+	background-color: #FFE6E6 ;
 }
