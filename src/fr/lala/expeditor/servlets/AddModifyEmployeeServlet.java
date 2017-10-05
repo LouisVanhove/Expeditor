@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.services.EmployeeService;
 
 /**
@@ -36,24 +37,26 @@ public class AddModifyEmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Employee currentEmployee = new Employee();
+		
 		//Test sur l'action voulue :
-		// Si c'est de l'ajoût, on ouvre un formulaire vide
+		// Si c'est de l'ajoût, on ouvre un formulaire vide. Employe = null.
+		// Si c'est de la modification, on ouvre un formulaire pré-rempli avec les données de l'employé sélectionné par son id.
 		if(request.getParameter("add") != null){
-			request.setAttribute("currentEmployee", null);			
-		// Si c'est de la modification, on ouvre un formulaire pré-rempli avec les données de l'employé sélectionné
+			currentEmployee = null;
 		}else if (request.getParameter("modify") != null){
 			//Appel au service Employee pour récupérer l'employé id = id
 			int id = Integer.parseInt(request.getParameter("id_employee"));
 			try {
-				Employee currentEmployee = serviceE.selectById(id);
-				request.setAttribute("currentEmployee", currentEmployee);
+				currentEmployee = serviceE.selectById(id);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}	
+		request.setAttribute("profiles", Profile.values());
+		request.setAttribute("currentEmployee", currentEmployee);			
 		request.getRequestDispatcher(view).forward(request, response);
 	}
-
 }

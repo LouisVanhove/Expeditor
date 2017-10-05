@@ -21,7 +21,7 @@
         
         <nav id="menu">
         	<ul id="menu-nav">
-            	<li >${User.profile} : ${User.firstName} ${User.lastName}</li>
+            	<li >${User.profile.toString()} : ${User.firstName} ${User.lastName}</li>
             	<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
             </ul>
         </nav>

@@ -26,7 +26,6 @@ public class EmployeeService implements ICrudServices<Employee>{
 		
 		Employee employee = null;
 		try {
-			employee = employeedao.selectByLogin(login, password);
 			String passwordCrypte = HashageSalagePassword.encryptPassword(password);
 			employee = employeedao.selectByLogin(login, passwordCrypte);
 		} catch (Exception e) {
@@ -41,14 +40,12 @@ public class EmployeeService implements ICrudServices<Employee>{
 	 */
 	@Override
 	public void insert(Employee data) throws Exception {
-		for (Employee employee : employeedao.selectAll()) {
-			if (data.getLogin().equals(employee.getLogin()) && 
-				data.getLastName().equals(employee.getLastName()) &&
-				data.getFirstName().equals(employee.getFirstName())) {
-				throw new Exception(String.format("L'employé {0} existe déjà.", data));
-			} 
+		if(validateLogin(data.getLastName()) && 
+			validatePassword(data.getPassword()) &&
+			validateLastName(data.getLastName()) &&
+			validateFirstName(data.getFirstName())){
+			employeedao.insert(data);		
 		}
-		employeedao.insert(data);		
 	}
 
 	/**
@@ -56,7 +53,12 @@ public class EmployeeService implements ICrudServices<Employee>{
 	 */
 	@Override
 	public void update(Employee data) throws Exception {
-		employeedao.update(data);
+		if(validateLogin(data.getLastName()) && 
+				validatePassword(data.getPassword()) &&
+				validateLastName(data.getLastName()) &&
+				validateFirstName(data.getFirstName())){
+			employeedao.update(data);
+		}
 	}
 
 	/**
@@ -85,4 +87,64 @@ public class EmployeeService implements ICrudServices<Employee>{
 		return result;
 	}
 
+	/**
+	 * Valide l'identifiant saisi dans le formulaire.
+	 * @param login
+	 * @throws Exception
+	 */
+	private boolean validateLogin(String login) throws Exception {
+		boolean isValid = false;
+		
+		for (Employee employee : employeedao.selectAll()) {
+			if (login.equals(employee.getLogin())) {
+				throw new Exception(String.format("Cet identifiant est déjà utilisé, merci d'en choisir un nouveau."));
+			} 
+		}
+		if (login.trim().length() == 0 ) {
+		    throw new Exception( "Merci de saisir un identifiant." );
+	    } else {
+	    	isValid = true;
+	    }
+		return isValid;
+	}
+	
+	/**
+	 * Valide le mot de passe saisi dans le formulaire.
+	 */
+	private boolean validatePassword(String password) throws Exception{
+		boolean isValid = false;
+	    if (password != null && password.trim().length() != 0) { 
+	    	if (password.trim().length() < 6 || password.trim().length() > 100) {
+	            throw new Exception("Le mot de passe doit être compris entre 6 et 100 caractères.");
+	        }
+	    } else if(password == null || password.trim().length() == 0){
+	        throw new Exception("Merci de saisir un mot de passe.");
+	    } else {
+	    	isValid = true;
+	    }
+		return isValid;
+	}
+	
+
+	private boolean validateFirstName(String firstName) throws Exception {
+		boolean isValid = false;		
+
+		if (firstName.trim().length() == 0 ) {
+		    throw new Exception( "Merci de saisir un prénom." );
+	    } else {
+	    	isValid = true;
+	    }
+		return isValid;
+	}
+
+	private boolean validateLastName(String lastName) throws Exception {
+		boolean isValid = false;
+
+		if (lastName.trim().length() == 0 ) {
+		    throw new Exception( "Merci de saisir un nom." );
+	    } else {
+	    	isValid = true;
+	    }
+		return isValid;
+	}
 }

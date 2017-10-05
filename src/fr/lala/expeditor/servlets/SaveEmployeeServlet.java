@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.services.EmployeeService;
 
 /**
@@ -14,7 +15,7 @@ import fr.lala.expeditor.services.EmployeeService;
  */
 public class SaveEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String VIEW = "/manager/ListEmployees";
+	private static final String VIEW = "ListEmployees";
     private EmployeeService serviceE = new EmployeeService();
 
     /**
@@ -56,11 +57,13 @@ public class SaveEmployeeServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
-			request.getRequestDispatcher(VIEW).forward(request, response);
+			//request.getRequestDispatcher(VIEW).forward(request, response);
+			response.sendRedirect(VIEW);
 			
 		// Si l'action est Annuler:
 		} else if (request.getParameter("cancel")!= null){
-			request.getRequestDispatcher(VIEW).forward(request, response);
+			//request.getRequestDispatcher(VIEW).forward(request, response);
+			response.sendRedirect(VIEW);
 		}
 	}
 
@@ -72,12 +75,28 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 */
 	private Employee buildEmployee(HttpServletRequest request) {
 		Employee employee = new Employee();
-		employee.setLogin(request.getParameter("login").trim());
-		employee.setPassword(request.getParameter("password").trim());
-		employee.setLastName(request.getParameter("lastName").trim());
-		employee.setFirstName(request.getParameter("firstName").trim());
-		//employee.setProfile(request.getParameter("profile"));
+		employee.setLogin(request.getParameter("txtboxLogin").trim());
+		employee.setPassword(request.getParameter("txtboxPassword").trim());
+		employee.setLastName(request.getParameter("txtboxLastName").trim());
+		employee.setFirstName(request.getParameter("txtboxFirstName").trim());
+		employee.setProfile(buildProfile(request));
 		return employee;
 	}
 
+	/**
+	 * Méthode en charge de récupérer le profil de l'employé
+	 * @param id_profile
+	 * @return
+	 */
+	private Profile buildProfile(HttpServletRequest request) {
+		Profile profile = Profile.values()[Integer.parseInt(request.getParameter("selectProfile"))-1];
+		/*
+		if("Manager".equals(request.getParameter("selectProfile"))){
+			 profile = Profile.MANAGER;
+		}
+		else if ("Préparateur de Commandes".equals(request.getParameter("selectProfile"))){
+			profile = Profile.SHIPPING_CLERK;
+		}*/
+		return profile;
+	}
 }

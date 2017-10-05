@@ -27,7 +27,7 @@ public class HashageSalagePassword {
 			try {
 				md5 = MessageDigest.getInstance("MD5");
 			} catch (NoSuchAlgorithmException e) {
-				logger.severe("Algorithe de cryptage MD5 non disponible sur l'environnement d'application.");
+				logger.severe("Algorithme de cryptage MD5 non disponible sur l'environnement d'application.");
 			}
 			md5.update(StandardCharsets.UTF_8.encode(salage));
 			logger.exiting("ToolUtilisateur", "encryptPassword");
