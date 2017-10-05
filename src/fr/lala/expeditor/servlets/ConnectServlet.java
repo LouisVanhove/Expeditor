@@ -2,7 +2,6 @@ package fr.lala.expeditor.servlets;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -12,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.lala.expeditor.models.Employee;
-import fr.lala.expeditor.models.Order;
 import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.services.EmployeeService;
-import fr.lala.expeditor.services.OrderService;
 
 /**
  * Servlet implementation class ConnectServlet
