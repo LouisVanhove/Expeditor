@@ -17,6 +17,9 @@ import fr.lala.expeditor.models.Order;
  */
 public class OrderService implements ICrudServices<Order> {
 	
+	private OrderDao orderdao = new OrderDao();
+	private List<Order> _orderList;
+	
 	/**
 	 * Méthode permettant de gérer l'importation des commandes.
 	 * @param value
@@ -63,10 +66,17 @@ public class OrderService implements ICrudServices<Order> {
 		
 	}
 
+	/**
+	 * Selection de la liste de toutes les commandes à traiter.
+	 */
 	@Override
 	public List<Order> selectAll() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			_orderList = orderdao.selectAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return _orderList;
 	}
 
 	@Override

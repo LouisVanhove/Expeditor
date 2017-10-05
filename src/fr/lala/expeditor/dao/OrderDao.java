@@ -76,6 +76,8 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			+ TABLE_ARTICLES_ORDERS
 			+ " VALUES(?, ?, ?)";
 	
+	private static final String SELECT_ALL = "SELECT * FROM TABLE_ORDERS WHERE COLUMN_ID_EMPLOYEE=0";
+	
 	/**
 	 * Mï¿½thode en charge de récupérer une liste de commandes
 	 * depuis un fichier CSV.
@@ -192,10 +194,28 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		return null;
 	}
 
+	/**
+	 * methode en charge de sélectionner la liste des commandes à traiter.
+	 */
 	@Override
 	public List<Order> selectAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orderList = new ArrayList<Order>();
+
+		try (Connection cnx = ConnectionPool.getConnection()) {
+			PreparedStatement cmd = cnx.prepareStatement(SELECT_ALL);
+
+			ResultSet rs = cmd.executeQuery();
+
+			// tant qu'il trouve quelque chose
+			while (rs.next()) {
+				// Ajout d'une commande à la liste
+				orderList.add(itemBuilder(rs));
+			}
+
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return orderList;
 	}
 
 	
