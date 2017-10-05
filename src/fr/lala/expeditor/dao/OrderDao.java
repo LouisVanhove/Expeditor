@@ -3,6 +3,8 @@ package fr.lala.expeditor.dao;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	private static final String COLUMN_ARCHIVED = "archived";
 	private static final String TABLE_ARTICLES_ORDERS = "ARTICLES_ORDERS";
 	
-	private static final char SEPARATOR = ',';
+	private static final String SEPARATOR = ",";
 	private static final String DATE_FORM = "dd/MM/yyyy HH:mm:ss";
 	
 	private static final String REQ_GET_NEXT_ORDER =
@@ -75,36 +77,38 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			+ " VALUES(?, ?, ?)";
 	
 	/**
-	 * Méthode en charge de récupérer une liste de commandes
+	 * Mï¿½thode en charge de récupérer une liste de commandes
 	 * depuis un fichier CSV.
 	 * @param File : fichier CSV
 	 * @return List<Order> : liste de commandes.
 	 * @throws IOException
 	 */
-	public static List<Order> importFromFile(File file) throws IOException {
+	public static List<Order> importFromFile(String value) throws IOException {
 		
 		List<Order> orders = new ArrayList<>();
-		FileReader fileReader = new FileReader(file);
-		CSVReader csvReader = new CSVReader(fileReader, SEPARATOR);	
-		String[] line = csvReader.readNext();
 		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORM);
-		
-		
-		while ((line = csvReader.readNext()) != null) {
+		String[] lines = value.split("\n");
+		boolean firstLine = true;
+		for(String line : lines) {
+			if(firstLine) {
+				firstLine = false;
+				continue;
+			}
+			String[] cells = line.split(SEPARATOR);
 			Order order = new Order();
 			orders.add(order);
 			order.setCustomer(new Customer());
 			order.setListArticles(new ArrayList<>());
-			
-			try {
-				order.setOrderDate(formatter.parse(line[0].trim()));
-				order.setId(Integer.parseInt(line[1].trim().substring(3)));
-				order.getCustomer().setName(line[2].trim());
-				order.getCustomer().setAddress(line[3].trim().split(" - ")[0]);
-				order.getCustomer().setZipCode(line[3].trim().split(" - ")[1].split(" ")[0]);
-				order.getCustomer().setCity(line[3].trim().split(" - ")[1].substring(order.getCustomer().getZipCode().length()).trim());
 				
-				String[] strArticles = line[4].split("; ");
+			try {
+				order.setOrderDate(formatter.parse(cells[0].trim()));
+				order.setId(Integer.parseInt(cells[1].trim().substring(3)));
+				order.getCustomer().setName(cells[2].trim());
+				order.getCustomer().setAddress(cells[3].trim().split(" - ")[0]);
+				order.getCustomer().setZipCode(cells[3].trim().split(" - ")[1].split(" ")[0]);
+				order.getCustomer().setCity(cells[3].trim().split(" - ")[1].substring(order.getCustomer().getZipCode().length()).trim());
+				
+				String[] strArticles = cells[4].split("; ");
 				for (String art_qt : strArticles) {
 					Article article = new Article();
 					article.setLabel(art_qt.split("\\(")[0]);
@@ -116,16 +120,15 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 				e.printStackTrace();
 			} catch (ParseException e) {
 				e.printStackTrace();
-			}
+			}	
 		}
-		
 		return orders;
 	}
 
 	
 	/**
 	 * Méthode en charge de fournir la prochaine à traiter par un
-	 * préparateur de commande.
+	 * pré½parateur de commande.
 	 * 
 	 * @return La prochaine commande à traiter.
 	 */
@@ -144,6 +147,9 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		return result;
 	}
 	
+	/**
+	 * Méthode en charge d'insérer une commande dans la bdd.
+	 */
 	@Override
 	public void insert(Order data) throws SQLException {
 		try (Connection connection = ConnectionPool.getConnection()){
@@ -155,16 +161,16 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			preparedStatement.setInt(4, 1);
 			preparedStatement.setInt(5, 0);
 			preparedStatement.executeUpdate();
-			/*
+			
 			preparedStatement = connection.prepareStatement(REQ_INSERT_ARTICLE_ORDER);
 			preparedStatement.setInt(1, data.getId());
 			for (Article article : data.getListArticles()) {
 				preparedStatement.setInt(2, article.getId());
 				preparedStatement.setInt(3, article.getQuantity());
 				preparedStatement.executeUpdate();
-			}*/
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new SQLException(e.getMessage());
 		}
 	}
 
@@ -194,7 +200,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 
 	
 	/**
-	 * Fonction permettat la construction d'un objet Order à partie d'un resultset
+	 * Fonction permettant la construction d'un objet Order à partir d'un resultset
 	 * Définition incomplète.
 	 */
 	@Override

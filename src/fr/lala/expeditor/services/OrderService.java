@@ -1,12 +1,39 @@
 package fr.lala.expeditor.services;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
+import fr.lala.expeditor.dao.ArticleDao;
+import fr.lala.expeditor.dao.CustomerDao;
 import fr.lala.expeditor.dao.OrderDao;
+import fr.lala.expeditor.models.Article;
 import fr.lala.expeditor.models.Order;
 
+/**
+ * Service gérant les commandes.
+ * @author lajzenberg2017
+ *
+ */
 public class OrderService implements ICrudServices<Order> {
-
+	
+	/**
+	 * Méthode permettant de gérer l'importation des commandes.
+	 * @param value
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	public static void importFromFile(String value) throws IOException, SQLException {
+		List<Order> orders = OrderDao.importFromFile(value);
+        for (Order order : orders) {
+        		order.getCustomer().setId(new CustomerDao().insert(order.getCustomer()));
+        		for(Article article : order.getListArticles()) {
+        			article.setId(new ArticleDao().selectIdByLabel(article.getLabel()));
+        		}
+        		new OrderDao().insert(order);
+        }
+	}
+	
 	/**
 	 * Méthode en charge de fournir la prochaine commande à traiter 
 	 * @return Order à traiter.
@@ -17,7 +44,7 @@ public class OrderService implements ICrudServices<Order> {
 		
 		return result;
 	}
-	
+
 	@Override
 	public void insert(Order data) throws Exception {
 		// TODO Auto-generated method stub
@@ -47,5 +74,6 @@ public class OrderService implements ICrudServices<Order> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }
+
