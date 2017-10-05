@@ -62,7 +62,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>GenDeliveryNoteServlet</servlet-name>
-    <url-pattern>/BonLivraison</url-pattern>
+    <url-pattern>/employee/BonLivraison</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -72,7 +72,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>SwitchToNextOrderServlet</servlet-name>
-    <url-pattern>/Commande</url-pattern>
+    <url-pattern>/employee/Commande</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -93,16 +93,6 @@
   <servlet-mapping>
     <servlet-name>ImportCsvServlet</servlet-name>
     <url-pattern>/manager/import</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>Test</display-name>
-    <servlet-name>Test</servlet-name>
-    <servlet-class>test.Test</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Test</servlet-name>
-    <url-pattern>/Test</url-pattern>
   </servlet-mapping>
   <servlet>
     <description>Servlet de gestion des employés (CRUD)</description>
@@ -133,5 +123,45 @@
   <servlet-mapping>
     <servlet-name>DeleteEmployeeServlet</servlet-name>
     <url-pattern>/manager/DeleteEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Servlet pour enregistrer l'ajout ou la modification d'un employé</description>
+    <display-name>SaveEmployeeServlet</display-name>
+    <servlet-name>SaveEmployeeServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.SaveEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SaveEmployeeServlet</servlet-name>
+    <url-pattern>/manager/SaveEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddModifyArticleServlet</display-name>
+    <servlet-name>AddModifyArticleServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.AddModifyArticleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddModifyArticleServlet</servlet-name>
+    <url-pattern>/manager/EditArticle</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteArticleServlet</display-name>
+    <servlet-name>DeleteArticleServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.DeleteArticleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteArticleServlet</servlet-name>
+    <url-pattern>/manager/DeleteArticle</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SaveArticleServlet</display-name>
+    <servlet-name>SaveArticleServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.SaveArticleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SaveArticleServlet</servlet-name>
+    <url-pattern>/manager/SaveArticle</url-pattern>
   </servlet-mapping>
 </web-app>

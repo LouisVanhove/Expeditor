@@ -3,6 +3,7 @@ package fr.lala.expeditor.services;
 import java.util.List;
 
 import fr.lala.expeditor.dao.EmployeeDao;
+import fr.lala.expeditor.models.Article;
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.utils.HashageSalagePassword;
 
@@ -40,6 +41,13 @@ public class EmployeeService implements ICrudServices<Employee>{
 	 */
 	@Override
 	public void insert(Employee data) throws Exception {
+		for (Employee employee : employeedao.selectAll()) {
+			if (data.getLogin().equals(employee.getLogin()) && 
+				data.getLastName().equals(employee.getLastName()) &&
+				data.getFirstName().equals(employee.getFirstName())) {
+				throw new Exception(String.format("L'employé {0} existe déjà.", data));
+			} 
+		}
 		employeedao.insert(data);		
 	}
 
@@ -68,10 +76,13 @@ public class EmployeeService implements ICrudServices<Employee>{
 		return result;
 	}
 
+	/**
+	 * Méthode pour sélectionner un employé donné.
+	 */
 	@Override
 	public Employee selectById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Employee result = employeedao.selectById(id);
+		return result;
 	}
 
 }

@@ -46,40 +46,56 @@ public class ManageArticlesServlet extends HttpServlet {
 		RequestDispatcher dispatcher = null;
 
 		// L'action est "Modifier" : on positionne un article à modifier comme articleCourant
-		if (request.getParameter("modifier")!=null || request.getParameter("ajouter")!=null) {
+		if (request.getParameter("modify")!=null) {
 			try {
-				afficherFormAjoutModifArticle(request, response);
+				// Récupération de l'id de l'article
+				String id = request.getParameter("id");
+				Article articleCurrent = articleservice.selectById(Integer.parseInt(id));
+				request.setAttribute("articleCurrent", articleCurrent);
+				view = "/WEB-INF/jsp/manager/formaddmodifyarticle.jsp";
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+		} else if (request.getParameter("add")!=null) {
+			try {
+				request.setAttribute("articleCurrent", null);
+				view = "/WEB-INF/jsp/manager/formaddmodifyarticle.jsp";
+				
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-		} else if (request.getParameter("supprimer")!=null) {
+		} else if (request.getParameter("delete")!=null) {
 			try {
-				supprimerArticle(request, response);
+				deleteArticle(request, response);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-		} else if (request.getParameter("enregistrer")!=null) {
+		} else if (request.getParameter("save")!=null) {
 
 			try {
 				// Récupération des informations saisies dans le formulaire
 				String id = request.getParameter(FIELD_ID_ARTICLE);
 
-				// Enregistrement d'une nouvel enfant
+				// Enregistrement d'une nouvel article
 				if (id.equals("")) {
 					try {
-						ajouterArticle(request, response);
+						addArticle(request, response);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					request.setAttribute("message", "L'ajout s'est déroulé avec succès");
 				} else {
 					try {
-						modifierArticle(request, response);	
+						updateArticle(request, response);	
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -100,9 +116,9 @@ public class ManageArticlesServlet extends HttpServlet {
 	 * @param request
 	 * @param response
 	 */
-	private void modifierArticle(HttpServletRequest request, HttpServletResponse response) {
-		Article articleAModifier = recupereParametre(request);
-		articleservice.update(articleAModifier);
+	private void updateArticle(HttpServletRequest request, HttpServletResponse response) {
+		Article articleToUpdate = getArticle(request);
+		articleservice.update(articleToUpdate);
 		view = "/manager/listarticles";
 		
 	}
@@ -112,9 +128,9 @@ public class ManageArticlesServlet extends HttpServlet {
 	 * @param request
 	 * @param response
 	 */
-	private void ajouterArticle(HttpServletRequest request, HttpServletResponse response) {
-		Article nouvelarticle = recupereParametre(request);
-		articleservice.insert(nouvelarticle);
+	private void addArticle(HttpServletRequest request, HttpServletResponse response) {
+		Article newarticle = getArticle(request);
+		articleservice.insert(newarticle);
 		view = "/manager/listarticles";
 		
 	}
@@ -124,33 +140,24 @@ public class ManageArticlesServlet extends HttpServlet {
 	 * @param request
 	 * @param response
 	 */
-	private void supprimerArticle(HttpServletRequest request, HttpServletResponse response) {
-				// Récupération de l'id dans le formulaire
-				String id = request.getParameter(FIELD_ID_ARTICLE);
-				//articleservice.delete(data);
-				view = "/manager/listarticles";
+	private void deleteArticle(HttpServletRequest request, HttpServletResponse response) {
+		Article articleToDelete = new Article();
+		articleToDelete.setId(Integer.parseInt(request.getParameter("id")));
+		articleToDelete.setLabel(request.getParameter("label"));
+		articleToDelete.setDescription(request.getParameter("description"));
+		articleToDelete.setWeight(Integer.parseInt(request.getParameter("weight")));
+		System.out.println(articleToDelete);
+		articleservice.delete(articleToDelete);
+		view = "/manager/listarticles";
 	}
 
-	/**
-	 * Méthode en charge d'afficher le formulaire pour l'ajout ou la modification d'un article.
-	 * @param request
-	 * @param response
-	 */
-	private void afficherFormAjoutModifArticle(HttpServletRequest request, HttpServletResponse response) {
-		// Récupération de l'id de l'article
-		String id = request.getParameter(FIELD_ID_ARTICLE);
-		Article articleCourant = articleservice.selectById(Integer.parseInt(id));
-		request.setAttribute("articleCourant", articleCourant);
-		view = "/WEB-INF/jsp/manager/managearticles.jsp";
-		
-	}
 	
 	/**
 	 * Méthode en charge de récuperer un article à partir de tous les champs du formulaire.
 	 * @param request
 	 * @return
 	 */
-	private Article recupereParametre(HttpServletRequest request) {
+	private Article getArticle(HttpServletRequest request) {
 		Article article = new Article();
 		article.setLabel(request.getParameter(FIELD_LABEL_ARTICLE).trim());
 		article.setDescription(request.getParameter(FIELD_DESCRIPTION_ARTICLE).trim());

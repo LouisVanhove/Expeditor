@@ -6,12 +6,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.lala.expeditor.models.Employee;
+import fr.lala.expeditor.services.EmployeeService;
+
 /**
  * Servlet implementation class AddModifyEmployeeServlet
  */
 public class AddModifyEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private EmployeeService serviceE = new EmployeeService();
+	private String view = "/WEB-INF/jsp/manager/formaddmodifyemployee.jsp";
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -24,7 +29,6 @@ public class AddModifyEmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -33,24 +37,23 @@ public class AddModifyEmployeeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Test sur l'action voulue :
-		if(request.getParameter("ajouter") != null){
-			//Cas de l'ajout, pas de remplissage formulaire
-			request.setAttribute("test", "AJOUT");
-		}else if (request.getParameter("modifier") != null){
-			// Cas modification 
-			request.setAttribute("test", "MODIFICATION");
-		}
-		
-		
-		
-		//Appel au service Employee pour récupérer l'employé id = id
-		
-		//Mettre l'employé dans la request
-		
-		//forwarder
-		
-		
-		request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request, response);
+		// Si c'est de l'ajoût, on ouvre un formulaire vide
+		if(request.getParameter("add") != null){
+			request.setAttribute("currentEmployee", null);			
+		// Si c'est de la modification, on ouvre un formulaire pré-rempli avec les données de l'employé sélectionné
+		}else if (request.getParameter("modify") != null){
+			//Appel au service Employee pour récupérer l'employé id = id
+			int id = Integer.parseInt(request.getParameter("id_employee"));
+			try {
+				Employee currentEmployee = serviceE.selectById(id);
+				request.setAttribute("currentEmployee", currentEmployee);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}	
+		request.getRequestDispatcher(view).forward(request, response);
 	}
 
 }

@@ -5,3 +5,10 @@ function confirmEmployeeSuppression(idform) {
     	document.getElementById(idform).submit();
     }
 }
+
+function confirmArticleSuppression(idform) {
+    var r = confirm("Voulez-vous vraiment supprimer cet article ?");
+    if (r == true) {
+    	document.getElementById(idform).submit();
+    }
+}

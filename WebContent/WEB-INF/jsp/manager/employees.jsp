@@ -11,7 +11,7 @@
 			
 			<form class="connexion" action="${pageContext.request.contextPath}/manager/EditEmployee" method="post">
 	   			 <div class="add-task-row">
-		   			<input type="submit" class="btn btn-md btn-primary" name="ajouter" value="Créer un nouvel employé">		   			
+		   			<input type="submit" class="btn btn-md btn-primary" name="add" value="Créer un nouvel employé">		   			
 		   		</div>
 			</form>
 		</div> 
@@ -37,16 +37,16 @@
 						<c:forEach items="${listEmployees}" var="employee">														
 							<tr>
 							<form action="${pageContext.request.contextPath}/manager/EditEmployee" method="post">
-								<input type="hidden" name="employee" value="${employee.id}"/>
+								<input type="hidden" name="id_employee" value="${employee.id}"/>
 								<td scope="row">${employee.id}</td>
 								<td>${employee.lastName} ${employee.firstName}</td>
 								<td>${employee.profile}</td>
-								<td><input type="submit" class="btn btn-md btn-primary" name="modifier" value="Modifier"/></td>
+								<td><input type="submit" class="btn btn-md btn-primary" name="modify" value="Modifier"/></td>
 							</form>
 							<form id="formSuppression${employee.id}" action="${pageContext.request.contextPath}/manager/DeleteEmployee" method="POST">
 								<input type="hidden" name="id_employee" value="${employee.id}"/>
 							</form>
-							<td><button class="btn btn-md btn-danger" name="supprimer" onclick="confirmEmployeeSuppression('formSuppression${employee.id}')" value="">Supprimer</button></td>
+							<td><button class="btn btn-md btn-danger" name="delete" onclick="confirmEmployeeSuppression('formSuppression${employee.id}')" value="">Supprimer</button></td>
 							</tr>							
 						</c:forEach>
 					</tbody>

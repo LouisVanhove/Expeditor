@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@include file="/WEB-INF/fragments/head.jsp"%>
-<title>Titre page</title>
+<title>Expeditor - &copy;lalateam</title>
 </head>
 <body>
 
@@ -21,7 +21,7 @@
         
         <nav id="menu">
         	<ul id="menu-nav">
-            	<li >${employee.name}</li>
+            	<li >${User.profile} : ${User.firstName} ${User.lastName}</li>
             	<li><a href="<%=request.getContextPath()%>/deconnexion">Deconnexion</a></li>
             </ul>
         </nav>
