@@ -235,6 +235,9 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 
 	public void setShippingClerk(Order data, Employee clerk) throws SQLException {
 		try (Connection connection = ConnectionPool.getConnection()){
+			System.out.println("OrderDao#setShippingClerk#try");
+			System.out.println("Id employé : "+clerk.getId());
+			System.out.println("Id commande : "+data.getId());
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_SHIPPING_CLERK);
 			preparedStatement.setInt(1, clerk.getId());
 			preparedStatement.setInt(2, data.getId());

@@ -86,8 +86,8 @@ public class OrderService implements ICrudServices<Order> {
 		return null;
 	}
 	
-	public void setShippingClerk(Order data, Employee clerk) throws SQLException{
-		new OrderDao().setShippingClerk(data, clerk);	
+	public void setShippingClerk(Order data) throws SQLException{
+		new OrderDao().setShippingClerk(data, data.getEmployee());	
 	}
 	
 	public void setProcessingDate(Order data) throws SQLException{
