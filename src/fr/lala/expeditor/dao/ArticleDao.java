@@ -32,6 +32,16 @@ public class ArticleDao implements ICrudDao<Article>{
 	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES SET Label=?, Description=?, Weight=? WHERE Id = ?";
 	private static final String ARCHIVE_ARTICLE = "UPDATE ARTICLES SET Archived=1 WHERE Id = ?";
 	
+	private static final String TABLE_ARTICLES = "ARTICLES";
+	private static final String REQ_SELECT_ID_BY_LABEL =
+			"SELECT "
+			+  COLUMN_ID
+			+ " FROM "
+			+ TABLE_ARTICLES
+			+ " WHERE UPPER("
+			+ COLUMN_LABEL
+			+ ") = UPPER(?)";
+	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 
@@ -142,6 +152,26 @@ public class ArticleDao implements ICrudDao<Article>{
 		return listearticles;
 	}
 
+	/**
+	 * Méthode permettant de récupérer l'identifiant (id) d'un article
+	 * d'après sa désignation (label).
+	 * @param String label
+	 * @return int id
+	 * @throws SQLException
+	 */
+	public static int selectIdByLabel(String label) throws SQLException {
+		int id = 0;
+		try (Connection connection = ConnectionPool.getConnection()) {
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SELECT_ID_BY_LABEL);
+			preparedStatement.setString(1, label);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next())
+				id = resultSet.getInt(COLUMN_ID);
+		} catch (SQLException e) {
+			throw new SQLException(e.getMessage());
+		}
+		return id;
+	}
 	
 	/**
 	 * Méthode en charge de récupérer un article.
@@ -159,6 +189,4 @@ public class ArticleDao implements ICrudDao<Article>{
 		article.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
 		return article;
 	}
-
-
 }

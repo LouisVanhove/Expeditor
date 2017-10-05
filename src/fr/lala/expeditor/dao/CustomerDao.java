@@ -9,6 +9,11 @@ import java.util.List;
 
 import fr.lala.expeditor.models.Customer;
 
+/**
+ * Classe permettant de gérer la couche d'accès à la base de données des clients.
+ * @author lajzenberg2017
+ *
+ */
 public class CustomerDao{
 	
 	private static final String TABLE_CLIENTS = "Clients";
@@ -18,7 +23,12 @@ public class CustomerDao{
 			+ TABLE_CLIENTS
 			+ " VALUES(?, ?, ?, ?, ?)";
 
-
+	/**
+	 * Méthode gérant l'insertion d'un client.
+	 * @param data
+	 * @return
+	 * @throws SQLException
+	 */
 	public int insert(Customer data) throws SQLException {
 		int id = 0;
 		try(Connection connection = ConnectionPool.getConnection()){
@@ -33,7 +43,7 @@ public class CustomerDao{
 			generatedKeys.next();
 			id = generatedKeys.getInt(1);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new SQLException(e.getMessage());
 		}
 		
 		return id;
