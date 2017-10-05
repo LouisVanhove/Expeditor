@@ -164,4 +164,14 @@
     <servlet-name>SaveArticleServlet</servlet-name>
     <url-pattern>/manager/SaveArticle</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OrderServlet</display-name>
+    <servlet-name>OrderServlet</servlet-name>
+    <servlet-class>fr.lala.expeditor.servlets.OrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OrderServlet</servlet-name>
+    <url-pattern>/manager/Order</url-pattern>
+  </servlet-mapping>
 </web-app>
