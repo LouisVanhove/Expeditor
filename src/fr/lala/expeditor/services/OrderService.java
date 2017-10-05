@@ -8,7 +8,6 @@ import fr.lala.expeditor.dao.ArticleDao;
 import fr.lala.expeditor.dao.CustomerDao;
 import fr.lala.expeditor.dao.OrderDao;
 import fr.lala.expeditor.models.Article;
-import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.Order;
 
 /**
