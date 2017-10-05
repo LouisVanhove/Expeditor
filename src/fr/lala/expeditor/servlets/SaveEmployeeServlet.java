@@ -20,7 +20,6 @@ import fr.lala.expeditor.utils.HashageSalagePassword;
  */
 public class SaveEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String VIEW = "ListEmployees";
 	private EmployeeDao employeeDao = new EmployeeDao();
 	private EmployeeService serviceE = new EmployeeService();
 	private Map<String, String> errors = new HashMap<String, String>();
@@ -48,6 +47,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		// Si l'action est Enregistrer:
 		if (request.getParameter("save") != null) {
 			// Validation des valeurs du formulaire:
@@ -57,12 +57,18 @@ public class SaveEmployeeServlet extends HttpServlet {
 			String enteredPassword = request.getParameter("txtboxPassword").trim();
 			String enteredLastName = request.getParameter("txtboxLastName").trim();
 			String enteredFirstName = request.getParameter("txtboxFirstName").trim();
-			errors = validateFields(enteredLogin, enteredPassword, enteredLastName, enteredFirstName);
+			errors = validateFields(enteredPassword, enteredLastName, enteredFirstName);
+			System.out.println(errors.toString());
 			// Si le Map d'erreurs est vide (donc champs valides)
 			if (errors.isEmpty()) {
-				// Si l'id est nul (donc employé inexistant en BDD), on le crée:
+				// Si l'id est vide (donc employé inexistant en BDD), on le crée:
 				if ("".equals(idEmploye)) {
 					try {
+						try {
+							validateLogin(enteredLogin);
+						} catch (Exception e) {
+							errors.put("Identifiant", e.getMessage());
+						}
 						System.out.println("je rentre dans l'ajout");
 						serviceE.insert(buildEmployee(request));
 					} catch (Exception e) {
@@ -74,7 +80,9 @@ public class SaveEmployeeServlet extends HttpServlet {
 					try {
 						System.out.println("je rentre dans la modif");
 						Employee employeeToModify = buildEmployee(request);
+						System.out.println(employeeToModify);
 						employeeToModify.setId(Integer.parseInt(idEmploye));
+						System.out.println(employeeToModify.getId());
 						serviceE.update(employeeToModify);
 						System.out.println(employeeToModify);
 					} catch (Exception e) {
@@ -82,16 +90,12 @@ public class SaveEmployeeServlet extends HttpServlet {
 					}
 					request.setAttribute("message", "La modification de l'employé s'est déroulée avec succès");
 				}
-				response.sendRedirect(VIEW);
+				response.sendRedirect("ListEmployees");
 			} else {
-				request.setAttribute("erreurs", errors);
-				request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request,response);
+				request.setAttribute("errors", errors);
+				request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request, response);;
 			}
-			// Si l'action est Annuler:
-		} else if (request.getParameter("cancel") != null) {
-			// request.getRequestDispatcher(VIEW).forward(request,
-			// response);
-			response.sendRedirect(VIEW);
+			
 		}
 	}
 
@@ -105,10 +109,15 @@ public class SaveEmployeeServlet extends HttpServlet {
 	private Employee buildEmployee(HttpServletRequest request) {
 		Employee employee = new Employee();
 		employee.setLogin(request.getParameter("txtboxLogin").trim());
+		System.out.println(employee.getLogin());
 		employee.setPassword(HashageSalagePassword.encryptPassword(request.getParameter("txtboxPassword").trim()));
+		System.out.println(employee.getPassword());
 		employee.setLastName(request.getParameter("txtboxLastName").trim());
+		System.out.println(employee.getLastName());
 		employee.setFirstName(request.getParameter("txtboxFirstName").trim());
+		System.out.println(employee.getFirstName());
 		employee.setProfile(buildProfile(request));
+		System.out.println(employee.getPassword().toString());
 		return employee;
 	}
 
@@ -123,12 +132,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 		return profile;
 	}
 
-	private Map<String, String> validateFields(String login, String password, String lastName, String firstName) {
-		try {
-			validateLogin(login);
-		} catch (Exception e) {
-			errors.put("Identifiant", e.getMessage());
-		}
+	private Map<String, String> validateFields(String password, String lastName, String firstName) {
 		try {
 			validatePassword(password);
 		} catch (Exception e) {
@@ -145,7 +149,6 @@ public class SaveEmployeeServlet extends HttpServlet {
 			errors.put("Prénom", e.getMessage());
 		}
 		return errors;
-
 	}
 
 	/**

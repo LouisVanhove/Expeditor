@@ -18,16 +18,16 @@
 						<fieldset id="write_employee" name="write_employee" value="Saisie Employé">
 						    <input type="hidden" id="id_employee" name="id_employee" value="${requestScope.currentEmployee.id}"/><br>						
 							<label id="login">Identifiant :</label> 
-							<span class="message">${erreurs['login']}</span>
+							<span class="message">${errors['login']}</span>
 							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${requestScope.currentEmployee.login}" required /><br>
 							<label id="password">Mot de passe :</label> 
-							<span class="message">${erreurs['password']}</span> 
+							<span class="message">${errors['password']}</span> 
 							<input type="password" id="txtboxPassword" name="txtboxPassword" size="100" class="form-control" value="${requestScope.currentEmployee.password}" required /><br>
 							<label id="lastName">Nom :</label> 
-							<span class="message">${erreurs['lastName']}</span>
+							<span class="message">${errors['lastName']}</span>
 							<input type="text" id="txtboxLastName" name="txtboxLastName" size="100" class="form-control" value="${requestScope.currentEmployee.lastName}" required /><br>
 							<label id="firstName">Prénom :</label> 
-							<span class="message">${erreurs['firstName']}</span>
+							<span class="message">${errors['firstName']}</span>
 							<input type="text" id="txtboxFirstName" name="txtboxFirstName" size="100" class="form-control" value="${requestScope.currentEmployee.firstName}" required /><br>
 							<label id="profile">Poste :</label><br> 
 							<select class="form-control" name="selectProfile" required>
