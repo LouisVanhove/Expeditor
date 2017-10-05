@@ -32,7 +32,7 @@ public class ArticleDao implements ICrudDao<Article>{
 	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES SET Label=?, Description=?, Weight=? WHERE Id = ?";
 	private static final String ARCHIVE_ARTICLE = "UPDATE ARTICLES SET Archived=1 WHERE Id = ?";
 	
-	private static final String SELECT_ARTICLES_BYORDER = "SELECT a.id, a.label, a.description, a.weight, a.archived, o.id_order"
+	private static final String SELECT_ARTICLES_BYORDER = "SELECT a.id, a.label, a.description, a.weight, a.archived, o.quantity, o.id_order"
 			+ " FROM ARTICLES a "
 			+ " JOIN ARTICLES_ORDERS o ON o.id_article=a.id"
 			+ " WHERE a.archived=0 and o.id_order=?";
@@ -217,6 +217,7 @@ public class ArticleDao implements ICrudDao<Article>{
 		article.setDescription(rs.getString(COLUMN_DESCRIPTION));
 		article.setWeight(rs.getInt(COLUMN_WEIGHT));
 		article.setArchived(rs.getBoolean(COLUMN_ARCHIVED));
+		article.setQuantity(rs.getInt("quantity"));
 		return article;
 	}
 }
