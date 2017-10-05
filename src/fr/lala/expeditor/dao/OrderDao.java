@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -38,9 +39,9 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
 	private static final String SEPARATOR = ",";
 	private static final String DATE_FORM = "dd/MM/yyyy HH:mm:ss";
-	
+	private static final String REQ_SET_SHIPPING_CLERK = "UPDATE ORDERS SET id_employee = ? WHERE id=?";
 	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC";
-			
+	private static final String REQ_SET_PROCESSING_DATE = "UPDATE ORDERS SET treatment_date = ? WHERE id = ?";
 	
 	private static final String REQ_INSERT_ORDER =
 			"INSERT INTO "
@@ -168,6 +169,8 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 		
 	}
 
+
+	
 	@Override
 	public void delete(Order data) throws SQLException {
 		// TODO Auto-generated method stub
@@ -194,6 +197,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	@Override
 	public Order itemBuilder(ResultSet rs) throws SQLException {
 		Order result = new Order();
+		System.out.println(rs.getInt(COLUMN_ID_CUSTOMER));
 		Customer c = new CustomerDao().selectById(rs.getInt(COLUMN_ID_CUSTOMER));
 		Employee e = new EmployeeDao().selectById(rs.getInt(COLUMN_ID_EMPLOYEE));
 		result.setCustomer(c);
@@ -206,5 +210,32 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	
 		return result;
 	}
+
+	public void setShippingClerk(Order data, Employee clerk) throws SQLException {
+		try (Connection connection = ConnectionPool.getConnection()){
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_SHIPPING_CLERK);
+			preparedStatement.setInt(1, clerk.getId());
+			preparedStatement.setInt(2, data.getId());
+			preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}
+		
+	}
+	
+	public void setProcessingDate(Order data) throws SQLException {
+		try (Connection connection = ConnectionPool.getConnection()){
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_PROCESSING_DATE);
+			preparedStatement.setDate(1, new java.sql.Date(new Date().getTime()));
+			preparedStatement.setInt(2, data.getId());
+			preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}
+		
+	}
+
+
+
 
 }
