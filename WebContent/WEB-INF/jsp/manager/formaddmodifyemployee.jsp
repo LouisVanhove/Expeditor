@@ -8,13 +8,12 @@
 	<section id="page_employees" class="section">
 		<div class="container">			
 			<div class="row">
-				<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-8 col-xs-8">
 					<h3>Ajout/Modification d'un employé</h3>
 					
 					<div class="panel-body">
 				 		<form id="editEmploye" class="editEmploye" action="${pageContext.request.contextPath}/manager/SaveEmployee" method="post"> 				 		
-				 			<fieldset id="write_employee" name="write_employee" value="Saisie Employé">
-   								<input type="hidden" id="id_employee" name="id_employee" value="${currentEmployee.id}"/><br>
+				 				<input type="hidden" id="id_employee" name="id_employee" value="${currentEmployee.id}"/><br>
    								<label id="login" >Identifiant :</label>
      							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${currentEmployee.login}" required /><br>
    								<label id="password" >Mot de passe :</label> 
@@ -24,7 +23,7 @@
    								<label id="firstName" >Prénom :</label> 
    								<input type="text" id="txtboxFirstName" name="txtboxFirstName" size="100" class="form-control" value="${currentEmployee.firstName}" required/><br>
    								<label id="profile" >Poste :</label><br>
-   								<select name="selectProfile" required>
+   								<select class="form-control" name="selectProfile" required>
 								    <option value="manager">Manager</option>
 								    <option value="shipping_clerk">Préparateur de Commandes</option>
 								</select><br>   								   								

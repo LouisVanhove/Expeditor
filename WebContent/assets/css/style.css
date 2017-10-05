@@ -1,5 +1,4 @@
 @CHARSET "UTF-8";
-
 html, hmtl a{
 	width:100%;
 	font-size: 100%; 
@@ -16,7 +15,11 @@ html, body {
 	margin-right: 0;
 	font-family: 'Titillium Web', sans-serif;
 }   
-            
+  
+*{
+	font-family: 'Titillium Web', sans-serif;
+} 
+         
 h1,
 h2,
 h3,
@@ -133,7 +136,6 @@ header #logo a {
 	display: block;
 	opacity: 1;
 	color:#FFFFFF;
-	width:600px;
 }
 
 header #logo a:hover {
@@ -182,16 +184,16 @@ nav#menu #menu-nav li a:hover {
 ================================================== */
 .sousmenu{
 	font-family: 'Titillium Web', sans-serif;
-	float: left;
 	padding-top: 10px;
 	margin-left: 5px;
 }
 .sousmenu ul li {
-	padding-right:15px;
+	padding-right:20px;
 	list-style: none;
 	display: inline-block;
 
 	}
+
 
 /* ==================================================
    retour des erreurs

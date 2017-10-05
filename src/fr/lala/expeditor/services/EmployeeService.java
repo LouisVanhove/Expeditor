@@ -26,7 +26,6 @@ public class EmployeeService implements ICrudServices<Employee>{
 		
 		Employee employee = null;
 		try {
-			employee = employeedao.selectByLogin(login, password);
 			String passwordCrypte = HashageSalagePassword.encryptPassword(password);
 			employee = employeedao.selectByLogin(login, passwordCrypte);
 		} catch (Exception e) {
