@@ -92,7 +92,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ImportCsvServlet</servlet-name>
-    <url-pattern>/import</url-pattern>
+    <url-pattern>/manager/import</url-pattern>
   </servlet-mapping>
   <servlet>
     <description>Servlet de gestion des employés (CRUD)</description>
