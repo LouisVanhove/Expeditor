@@ -32,11 +32,21 @@ public class ArticleDao implements ICrudDao<Article>{
 	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES SET Label=?, Description=?, Weight=? WHERE Id = ?";
 	private static final String ARCHIVE_ARTICLE = "UPDATE ARTICLES SET Archived=1 WHERE Id = ?";
 	
+	private static final String TABLE_ARTICLES = "ARTICLES";
+	private static final String REQ_SELECT_ID_BY_LABEL =
+			"SELECT "
+			+  COLUMN_ID
+			+ " FROM "
+			+ TABLE_ARTICLES
+			+ " WHERE UPPER("
+			+ COLUMN_LABEL
+			+ ") = UPPER(?)";
+	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
 
 	/**
-	 * Méthode d'insertion d'un article en base.
+	 * Mï¿½thode d'insertion d'un article en base.
 	 */
 	@Override
 	public void insert(Article data) throws SQLException {
@@ -54,7 +64,7 @@ public class ArticleDao implements ICrudDao<Article>{
 	}
 
 	/**
-	 * Méthode de modification d'un article en base.
+	 * Mï¿½thode de modification d'un article en base.
 	 */
 	@Override
 	public void update(Article data) throws SQLException {
@@ -74,7 +84,7 @@ public class ArticleDao implements ICrudDao<Article>{
 	}
 
 	/**
-	 * Méthode de suppression d'un article en base.
+	 * Mï¿½thode de suppression d'un article en base.
 	 */
 	@Override
 	public void delete(Article data) throws SQLException {
@@ -116,7 +126,7 @@ public class ArticleDao implements ICrudDao<Article>{
 	}
 
 	/**
-	 * Méthode de sélection de tous les articles en base.
+	 * Mï¿½thode de sï¿½lection de tous les articles en base.
 	 */
 	@Override
 	public List<Article> selectAll() throws SQLException {
@@ -129,7 +139,7 @@ public class ArticleDao implements ICrudDao<Article>{
 
 			// tant qu'il trouve quelque chose
 			while (rs.next()) {
-				// Ajout d'un article à la liste
+				// Ajout d'un article ï¿½ la liste
 				listearticles.add(itemBuilder(rs));
 			}
 
@@ -138,6 +148,27 @@ public class ArticleDao implements ICrudDao<Article>{
 		}
 
 		return listearticles;
+	}
+	
+	/**
+	 * Méthode permettant de récupérer l'identifiant (id) d'un article
+	 * d'après sa désignation (label).
+	 * @param String label
+	 * @return int id
+	 * @throws SQLException
+	 */
+	public static int selectIdByLabel(String label) throws SQLException {
+		int id = 0;
+		try (Connection connection = ConnectionPool.getConnection()) {
+			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SELECT_ID_BY_LABEL);
+			preparedStatement.setString(1, label);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next())
+				id = resultSet.getInt(COLUMN_ID);
+		} catch (SQLException e) {
+			throw new SQLException(e.getMessage());
+		}
+		return id;
 	}
 
 	
