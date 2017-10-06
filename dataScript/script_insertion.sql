@@ -11,7 +11,7 @@ INSERT INTO EMPLOYEES (login, password, name, firstname, profile, archived)
      
 
 INSERT INTO ARTICLES (label,description,weight,archived)
-     VALUES ('Disque', 'super qualité', 150 ,0);
+     VALUES ('Disque', 'super qualite', 150 ,0);
 INSERT INTO ARTICLES (label,description,weight,archived)
      VALUES ('Carte graphique','une résolution haute définition',100 ,0);
 INSERT INTO ARTICLES (label,description,weight,archived)
