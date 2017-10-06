@@ -60,17 +60,17 @@ public class ImportCsvServlet extends HttpServlet {
 	                if (value.isEmpty())
 	                	message = empty;
 	                else                
-	                 OrderService.importFromFile(value);                
+	                	OrderService.importFromFile(value);                
 	            }
 	        }
 	    } catch (FileUploadException e) {
 	        message = error;
 	    } catch (SQLException e) {
+	    	e.printStackTrace();
 			message = error;
 		}
 	    request.setAttribute("import_message", message);
 	    response.setContentType("text/html;charset=UTF-8");
 		request.getRequestDispatcher(REDIRECT).forward(request, response);
 	}
-
 }
