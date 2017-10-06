@@ -58,7 +58,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 			String enteredPasswordConfirm = request.getParameter("txtboxPasswordConfirm").trim();
 			String enteredLastName = request.getParameter("txtboxLastName").trim();
 			String enteredFirstName = request.getParameter("txtboxFirstName").trim();
-			
+			String comparePassword = request.getParameter("comparePassword");
 			Employee employeeToSave = buildEmployee(request);
 			request.setAttribute("currentEmployee", employeeToSave);
 			
@@ -81,6 +81,9 @@ public class SaveEmployeeServlet extends HttpServlet {
 				} else {
 					try {
 						Employee employeeToModify = buildEmployee(request);
+						if(!comparePassword.equals(employeeToModify.getPassword())){
+							employeeToModify.setPassword(HashageSalagePassword.encryptPassword(employeeToModify.getPassword()));
+						}
 						employeeToModify.setId(Integer.parseInt(idEmploye));
 						serviceE.update(employeeToModify);
 					} catch (Exception e) {
@@ -104,7 +107,17 @@ public class SaveEmployeeServlet extends HttpServlet {
 	private Employee buildEmployee(HttpServletRequest request) {
 		Employee employee = new Employee();
 		employee.setLogin(request.getParameter("txtboxLogin").trim());
-		employee.setPassword(HashageSalagePassword.encryptPassword(request.getParameter("txtboxPassword").trim()));
+		String mdp = request.getParameter("txtboxPassword");
+		String confirm = request.getParameter("txtboxPasswordConfirm");
+		System.out.println("mdp : "+mdp);
+		System.out.println("confirm : "+confirm);
+				
+		if(!mdp.equals(confirm)){
+			employee.setPassword("");
+		}else{
+			employee.setPassword(request.getParameter("txtboxPassword").trim());
+		}
+		
 		employee.setLastName(request.getParameter("txtboxLastName").trim());
 		employee.setFirstName(request.getParameter("txtboxFirstName").trim());
 		employee.setProfile(buildProfile(request));

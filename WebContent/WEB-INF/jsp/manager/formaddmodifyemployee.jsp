@@ -25,7 +25,8 @@
 							<input type="password" id="txtboxPassword" name="txtboxPassword" size="100" class="form-control" value="${requestScope.currentEmployee.password}" required /><br>
 							<label id="passwordConfirm">Confirmer le mot de passe :</label> 
 							<span class="message">${errors['passwordConfirm']}</span> 
-							<input type="password" id="txtboxPasswordConfirm" name="txtboxPasswordConfirm" size="100" class="form-control" value="" required /><br>
+							<input type="password" id="txtboxPasswordConfirm" name="txtboxPasswordConfirm" size="100" class="form-control" value="${requestScope.currentEmployee.password}" required />
+							<input type="hidden" id="comparePassword" name="comparePassword" size="100" value="${requestScope.currentEmployee.password}" />
 							<label id="lastName">Nom :</label> 
 							<span class="message">${errors['lastName']}</span>
 							<input type="text" id="txtboxLastName" name="txtboxLastName" size="100" class="form-control" value="${requestScope.currentEmployee.lastName}" required /><br>

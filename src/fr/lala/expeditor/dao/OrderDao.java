@@ -224,7 +224,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	@Override
 	public Order itemBuilder(ResultSet rs) throws SQLException {
 		Order result = new Order();
-		System.out.println(rs.getInt(COLUMN_ID_CUSTOMER));
 		Customer c = new CustomerDao().selectById(rs.getInt(COLUMN_ID_CUSTOMER));
 		Employee e = new EmployeeDao().selectById(rs.getInt(COLUMN_ID_EMPLOYEE));
 		result.setCustomer(c);
@@ -239,26 +238,22 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	}
 
 	/**
-	 * MÃ©thode en charge de modifier une commande afin de lui affecter
-	 * un prÃ©parateur.
+	 * Méthode en charge de modifier une commande afin de lui affecter
+	 * un préparateur.
 	 *
 	 * @param data Commande Ã  modifer.
-	 * @param clerk PrÃ©parateur de commandes Ã  affecter.
+	 * @param clerk Préparateur de commandes à affecter.
 	 * @throws SQLException
 	 */
 	public void setShippingClerk(Order data, Employee clerk) throws SQLException {
 		try (Connection connection = ConnectionPool.getConnection()){
-			System.out.println("OrderDao#setShippingClerk#try");
-			System.out.println("Id employï¿½ : "+clerk.getId());
-			System.out.println("Id commande : "+data.getId());
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_SHIPPING_CLERK);
 			preparedStatement.setInt(1, clerk.getId());
 			preparedStatement.setInt(2, data.getId());
 			preparedStatement.executeUpdate();
 		}catch (Exception e) {
 			throw new SQLException(e.getMessage());
-		}
-		
+		}	
 	}
 
 	/**
@@ -268,7 +263,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	 * @throws SQLException
 	 */
 	public void setProcessingDate(Order data) throws SQLException {
-		System.out.println(data);
 		try (Connection connection = ConnectionPool.getConnection()){
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_PROCESSING_DATE);
 			preparedStatement.setDate(1, new java.sql.Date(new Date().getTime()));
