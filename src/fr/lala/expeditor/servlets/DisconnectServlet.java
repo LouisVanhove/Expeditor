@@ -33,7 +33,9 @@ public class DisconnectServlet extends HttpServlet {
 			/* Recuperation et destruction de la session en cours */
 	        HttpSession session = request.getSession();
 	        if(session.getAttribute("currentOrder") != null){
-				new OrderService().resetOrder((Order)session.getAttribute("currentOrder"));
+	        	Order order = (Order)session.getAttribute("currentOrder");
+	        	System.out.println("Commande a remettre sur la pile : "+order);
+				new OrderService().resetOrder(order);
 			}
 	        session.invalidate();
 	        redirection =  "/connexion";		

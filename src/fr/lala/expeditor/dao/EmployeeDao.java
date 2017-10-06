@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.enums.Profile;
-import fr.lala.expeditor.utils.HashageSalagePassword;
 import fr.lala.expeditor.utils.MonLogger;
 
 /**
