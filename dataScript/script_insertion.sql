@@ -19,4 +19,8 @@ INSERT INTO ARTICLES (label,description,weight,archived)
 INSERT INTO ARTICLES (label,description,weight,archived)
      VALUES ('Alimentation','conseillé un ordinateur performant',300 ,0);
 
+INSERT INTO STATES VALUES ('PENDING');
+INSERT INTO STATES VALUES ('IN_PROGRESS');
+INSERT INTO STATES VALUES ('PROCESSED');
+
 
