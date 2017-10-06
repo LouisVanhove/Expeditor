@@ -29,11 +29,8 @@
 								<span class="message">${message}</span>
 					
 							</form>
-						</div><!-- fin panel body -->
-
+						</div><!-- fin -->
 			</div><!-- fin row -->
-			
-			
 		</div><!-- fin container --> 
 	</section><!-- fin section -->
 
