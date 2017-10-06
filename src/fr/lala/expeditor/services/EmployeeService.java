@@ -153,4 +153,9 @@ public class EmployeeService implements ICrudServices<Employee>{
 	    }
 		return isValid;
 	}
+
+	public List<Employee> selectAllWithArchived() {
+		List<Employee> result = employeedao.selectAllWithArchived();
+		return result;
+	}
 }

@@ -49,6 +49,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
+		request.setAttribute("errors", null);
 		// Si l'action est Enregistrer:
 		if (request.getParameter("save") != null) {
 			// Validation des valeurs du formulaire:
@@ -64,7 +65,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 			
 			errors = validateFields(enteredLogin, enteredPassword, enteredPasswordConfirm, enteredLastName, enteredFirstName);
 			if ("".equals(idEmploye)) {
-				validateLoginUnique(enteredLogin, (List<Employee>)session.getAttribute("listEmployees")); 
+				validateLoginUnique(enteredLogin, serviceE.selectAllWithArchived()); 
 			}
 			// Si le Map d'erreurs est vide (donc champs valides)
 			if (errors.isEmpty()) {
@@ -146,6 +147,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 * @return
 	 */
 	private Map<String, String> validateFields(String login, String password, String passwordConfirm, String lastName, String firstName) {
+		System.out.println("Passowrds : "+ password+" | "+passwordConfirm);
 		try {
 			validateLogin(login);
 		} catch (Exception e) {
@@ -238,7 +240,8 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 * @param enteredLogin
 	 * @throws SQLException
 	 */
-	private Map<String, String> validateLoginUnique(String enteredLogin, List<Employee> listEmployees) {
+	private void validateLoginUnique(String enteredLogin, List<Employee> listEmployees) {
+		System.out.println(listEmployees);
 			try{
 				for(Employee employee : listEmployees){
 					if (enteredLogin.equals(employee.getLogin())) {
@@ -246,8 +249,8 @@ public class SaveEmployeeServlet extends HttpServlet {
 					}
 				}
 			}catch (Exception e){
-				errors.put("login", "Cet identifiant existe déjà");
+				errors.put("login", "Cet identifiant existe déjà. Il peut s'agir d'un compte inactif");
 			}
-			return errors;
+		
 	}
 }

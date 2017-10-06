@@ -37,6 +37,9 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			+ " FROM EMPLOYEES e"
 			+ " WHERE e.archived=0";
 	
+	private static final String SELECT_ALL_EMPLOYEES_WITH_ARCHIVED = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
+			+ " FROM EMPLOYEES e";
+	
 	private static final String SELECT_ALL_EMPLOYEES_TOTAL = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
 			+ " FROM EMPLOYEES e";
 	
@@ -314,5 +317,21 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			profile = Profile.SHIPPING_CLERK;
 		}
 		return profile;
+	}
+
+	public List<Employee> selectAllWithArchived() {
+		List<Employee> result = new ArrayList<>();
+		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_EMPLOYEES_WITH_ARCHIVED);
+			
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()){
+				result.add(itemBuilder(rs));
+			}
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return result;
 	}
 }
