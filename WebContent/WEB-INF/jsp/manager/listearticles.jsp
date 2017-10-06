@@ -24,7 +24,7 @@
 									<thead>
 										<tr>
 											<th>Référence</th>
-											<th>Label</th>
+											<th>Désignation</th>
 											<th>Description</th>
 											<th>Poids</th>
 											<th></th>

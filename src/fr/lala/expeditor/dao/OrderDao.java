@@ -40,7 +40,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	private static final String SEPARATOR = ",";
 	private static final String DATE_FORM = "dd/MM/yyyy HH:mm:ss";
 	private static final String REQ_SET_SHIPPING_CLERK = "UPDATE ORDERS SET id_employee = ? WHERE id=?";
-	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC";
+	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC, id ASC";
 	private static final String REQ_SET_PROCESSING_DATE = "UPDATE ORDERS SET treatment_date = ? WHERE id = ?";
 	private static final String REQ_UPDATE_ORDER_STATE="UPDATE ORDERS SET state=? WHERE id=?";
 	private static final String REQ_RESET_ORDER = "UPDATE ORDERS SET id_employee = NULL, state=1 WHERE id=?";
@@ -67,14 +67,14 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			+ " VALUES(?, ?, ?)";
 	
 	private static final String SELECT_ALL = "SELECT * FROM ORDERS o"
-						+ " JOIN EMPLOYEES e ON e.id = o.id_employee"
-						+ " WHERE state=1";
+						+ " LEFT JOIN EMPLOYEES e ON e.id = o.id_employee"
+						+ " WHERE state=1 OR state=2 ORDER BY STATE DESC, order_date ASC, o.id ASC";
 
 
 
 
 	/**
-	 * Mï¿½thode en charge de rï¿½cupï¿½rer une liste de commandes
+	 * Méthode en charge de rï¿½cupï¿½rer une liste de commandes
 	 * depuis un fichier CSV.
 	 * @param File : fichier CSV
 	 * @return List<Order> : liste de commandes.
@@ -132,7 +132,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	public Order selectNextOrder(){
 		Order result = null ;
 		try (Connection cnx = ConnectionPool.getConnection()) {
-			System.out.println("Entrï¿½e dans le try de selectNextOrder");
 			PreparedStatement cmd = cnx.prepareStatement(REQ_GET_NEXT_ORDER);
 			ResultSet rs = cmd.executeQuery();
 			if (rs.next()) {
@@ -225,7 +224,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	@Override
 	public Order itemBuilder(ResultSet rs) throws SQLException {
 		Order result = new Order();
-		System.out.println(rs.getInt(COLUMN_ID_CUSTOMER));
 		Customer c = new CustomerDao().selectById(rs.getInt(COLUMN_ID_CUSTOMER));
 		Employee e = new EmployeeDao().selectById(rs.getInt(COLUMN_ID_EMPLOYEE));
 		result.setCustomer(c);
@@ -240,26 +238,22 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	}
 
 	/**
-	 * MÃ©thode en charge de modifier une commande afin de lui affecter
-	 * un prÃ©parateur.
+	 * Méthode en charge de modifier une commande afin de lui affecter
+	 * un préparateur.
 	 *
 	 * @param data Commande Ã  modifer.
-	 * @param clerk PrÃ©parateur de commandes Ã  affecter.
+	 * @param clerk Préparateur de commandes à affecter.
 	 * @throws SQLException
 	 */
 	public void setShippingClerk(Order data, Employee clerk) throws SQLException {
 		try (Connection connection = ConnectionPool.getConnection()){
-			System.out.println("OrderDao#setShippingClerk#try");
-			System.out.println("Id employï¿½ : "+clerk.getId());
-			System.out.println("Id commande : "+data.getId());
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_SHIPPING_CLERK);
 			preparedStatement.setInt(1, clerk.getId());
 			preparedStatement.setInt(2, data.getId());
 			preparedStatement.executeUpdate();
 		}catch (Exception e) {
 			throw new SQLException(e.getMessage());
-		}
-		
+		}	
 	}
 
 	/**
@@ -269,7 +263,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	 * @throws SQLException
 	 */
 	public void setProcessingDate(Order data) throws SQLException {
-		System.out.println(data);
 		try (Connection connection = ConnectionPool.getConnection()){
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_PROCESSING_DATE);
 			preparedStatement.setDate(1, new java.sql.Date(new Date().getTime()));
