@@ -19,7 +19,7 @@
 						    <input type="hidden" id="id_employee" name="id_employee" value="${requestScope.currentEmployee.id}"/><br>						
 							<label id="login">Identifiant :</label> 
 							<span class="message">${errors['login']}</span>
-							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${requestScope.currentEmployee.login}" required /><br>
+							<input type="text" id="txtboxLogin" name="txtboxLogin" size="100" class="form-control" value="${requestScope.currentEmployee.login}" required <c:if test="${requestScope.currentEmployee.id != null }">readonly</c:if>/><br>
 							<label id="password">Mot de passe :</label> 
 							<span class="message">${errors['password']}</span> 
 							<input type="password" id="txtboxPassword" name="txtboxPassword" size="100" class="form-control" value="${requestScope.currentEmployee.password}" required /><br>

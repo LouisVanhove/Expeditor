@@ -72,6 +72,7 @@ public class SaveEmployeeServlet extends HttpServlet {
 				if ("".equals(idEmploye)) {
 					//validateLoginUnique(enteredLogin, (List<Employee>)session.getAttribute("listEmployees")); 
 					try {
+						employeeToSave.setPassword(HashageSalagePassword.encryptPassword(employeeToSave.getPassword()));
 						serviceE.insert(employeeToSave);
 					} catch (Exception e) {
 						e.printStackTrace();
