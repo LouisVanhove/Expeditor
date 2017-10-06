@@ -64,6 +64,4 @@
 		</div><!-- fin container --> 
 	</section><!-- fin section -->
 
-
-
 <c:import url="/WEB-INF/fragments/footer.jsp"/>

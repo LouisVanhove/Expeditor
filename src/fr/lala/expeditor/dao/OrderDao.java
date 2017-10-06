@@ -269,13 +269,15 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	 * @throws SQLException
 	 */
 	public void setProcessingDate(Order data) throws SQLException {
+		System.out.println(data);
 		try (Connection connection = ConnectionPool.getConnection()){
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_SET_PROCESSING_DATE);
 			preparedStatement.setDate(1, new java.sql.Date(new Date().getTime()));
 			preparedStatement.setInt(2, data.getId());
 			preparedStatement.executeUpdate();
 		}catch (Exception e) {
-			throw new SQLException(e.getMessage());
+			throw e;
+			//throw new SQLException(e.getMessage());
 		}
 		
 	}
@@ -289,9 +291,11 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	 * @throws SQLException
 	 */
 	public void updateOrderState(Order data, State state) throws SQLException {
+		System.out.println("id state : "+state.getId());
+		System.out.println("id order : "+data.getId());
 		try (Connection connection = ConnectionPool.getConnection()){
 			PreparedStatement preparedStatement = connection.prepareStatement(REQ_UPDATE_ORDER_STATE);
-			preparedStatement.setInt(1, data.getId());
+			preparedStatement.setInt(2, data.getId());
 			preparedStatement.setInt(1, state.getId());
 			preparedStatement.executeUpdate();
 		}catch (Exception e) {

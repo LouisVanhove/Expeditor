@@ -35,12 +35,26 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session  = request.getSession(true);
-		Order currentOrder = null ;
+		Order currentOrder = (Order) session.getAttribute("currentOrder") ;
 		
-		if(session.getAttribute("currentOrder") != null){
+		
+		
+		if( currentOrder != null){
+			//Mise à jour de la commande qui vient d'être cloturée
+			try {
+				orderService.setProcessingDate(currentOrder);
+				orderService.updateOrderState(currentOrder, State.PROCESSED);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			//Purge de la commande.
 			session.setAttribute("currentOrder", null);
 		}
 		
+		
+		
+		//Récupération de la commande suivante.
 		try {
 			currentOrder=orderService.getNextOrder();
 			Employee emp = (Employee)session.getAttribute("User");
@@ -59,13 +73,7 @@ public class SwitchToNextOrderServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session  = request.getSession(true);
-		Order currentOrder = (Order)session.getAttribute("currentOrder");
-		try {
-			orderService.setProcessingDate(currentOrder);
-			orderService.updateOrderState(currentOrder, State.PROCESSED);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		doGet(request, response);
 	}
 

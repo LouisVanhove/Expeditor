@@ -3,10 +3,13 @@ package fr.lala.expeditor.utils;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -75,12 +78,7 @@ public class PDFUtils {
      * @param canvas
      */
     private static void setOrderInfo(Order order, PdfContentByte canvas) {
-        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande nï¿½ "+order.getId()), 50, 670, 0);
-        BarcodeQRCode qrcode = new BarcodeQRCode(codeString.trim(), 1, 1, null);
-        Image qrcodeImage = qrcode.getImage();
-        qrcodeImage.setAbsolutePosition(450,670);
-        qrcodeImage.scalePercent(200);
-        document.add(qrcodeImage);
+        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Commande n° "+order.getId()), 50, 670, 0);
 	}
     
 
@@ -92,7 +90,6 @@ public class PDFUtils {
      */
     public static void setOrderDetail(Order data, PdfContentByte canvas){
     	int i = 630 ;
-    	int shippedElementsCount = 0 ;
     	//En tete
     	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("REF"), 50, i, 0);
         ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("DESIGNATION"), 150, i, 0);
@@ -103,7 +100,7 @@ public class PDFUtils {
         //Gï¿½nï¿½ration a partir du tableau : 
         i=i-30;
         for (Article c : data.getListArticles()) {
-            boxWeight += a.getWeight();
+            boxWeight += (c.getWeight()*c.getQuantity());
         	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(String.valueOf(c.getId())), 50, i, 0);
             ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(c.getLabel()), 150, i, 0);
             ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(String.valueOf(c.getWeight())), 350, i, 0);
@@ -112,7 +109,10 @@ public class PDFUtils {
 		}
         ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("__________________________________________________________________________"), 50, i, 0);
         i = i-40;
-        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("POIDS COLIS : "+boxWeight), 420, 670, 0);
+        int weightKg = boxWeight/1000 ;
+        int weightG = boxWeight%1000;
+        String display = String.valueOf(weightKg) + ","+String.valueOf(weightG)+" Kg";
+        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("POIDS COLIS : "+ display), 420, 670, 0);
         
     }
     
