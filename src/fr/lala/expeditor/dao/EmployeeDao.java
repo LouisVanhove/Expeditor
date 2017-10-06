@@ -51,11 +51,11 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			+ " FROM EMPLOYEES e"
 			+ " WHERE e.archived = 0 "
 			+ " AND e.id=?";
-	private static final String SELECT_ALL_EMPLOYEES_PROCESSORDER ="SELECT e.id, e.name, e.firstname, COUNT(*) AS total"
-			+ " FROM EMPLOYEES e JOIN ORDERS o ON o.id_employee = e.id"
-			+ " WHERE e.[profile] = 2 AND o.[state] = 3 AND o.treatment_date = cast(GETDATE() as date)"
-			+ " AND e.archived = 0 AND o.archived = 0"
-			+ " GROUP BY e.id, e.name, e.firstname";
+	private static final String SELECT_ALL_SHIPPING_CLERKS ="SELECT * FROM EMPLOYEES WHERE profile=2 AND archived=0";
+	
+	private static final String REQ_GET_PROCESSED_ORDER_COUNT_BY_CLERK ="SELECT	COUNT(*) AS number"
+			+ " FROM EMPLOYEES e JOIN ORDERS o ON o.id_employee = ? "
+			+ " WHERE e.id=2 AND o.state = 3 AND o.treatment_date = cast(GETDATE() as date)" ;
 	
 	// monlogger retourne un objet de type logger
 	Logger logger = MonLogger.getLogger(this.getClass().getName());
@@ -139,6 +139,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	/**
 	 * Méthode retournant la liste des employés (préparateurs de commande et manager) 
 	 * travaillant dans l'entreprise (archived = 0).
+	 * 
 	 * @return liste d'employés actifs.
 	 */
 	@Override
@@ -162,29 +163,54 @@ public class EmployeeDao implements ICrudDao<Employee>{
 	 * Méthode retournant la liste des employés (préparateurs de commande) 
 	 * travaillant dans l'entreprise (archived = 0)
 	 * avec leur nombre de commandes traitées à la date du jour.
+	 * 
 	 * @return liste d'employés actifs.
 	 */
 	public List<Employee> selectAllEmployeProcessOrder() throws SQLException {
 		List<Employee> result = new ArrayList<>();
 		
 		try(Connection cnx = ConnectionPool.getConnection()){
-			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_EMPLOYEES_PROCESSORDER);
-
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_SHIPPING_CLERKS);
 			ResultSet rs = stm.executeQuery();
 
-			// tant qu'il trouve quelque chose
 			while (rs.next()) {
-				// Ajout d'un employé à la liste
 				result.add(employeBuilder(rs));
 			}
 		} catch (SQLException e) {
 			logger.severe("Erreur : " + e.getMessage());
 			e.printStackTrace();
 		}
-		System.out.println("dao :" + result);
+		
+		for(Employee e : result){
+			e.setProcessedOrder(getTodaysProcessedOrders(e));
+		}
+		
+		System.out.println("Liste des employés : "+result);
 		return result;
 	}
 
+	/**
+	 * M2thode en charge de renseigner le nombre de commandes traités par employé
+	 * 
+	 * @param e Employé à renseigner
+	 * @return Le nombre de commandes traitées par e.
+	 */
+	private int getTodaysProcessedOrders(Employee e) {
+		int result = 0 ;
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(REQ_GET_PROCESSED_ORDER_COUNT_BY_CLERK);
+			stm.setInt(1, e.getId());
+			ResultSet rs = stm.executeQuery();
+
+			if (rs.next()) {
+				result = rs.getInt("number");
+			}
+		} catch (SQLException ex) {
+			logger.severe("Erreur : " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		return result;
+	}
 
 	/**
 	 * Methode de sélection d'un employé en base en fonction de son login et mot de passe.
@@ -244,7 +270,6 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		employee.setId(rs.getInt(COLUMN_ID));
 		employee.setLastName(rs.getString(COLUMN_NAME));
 		employee.setFirstName(rs.getString(COLUMN_FIRSTNAME));
-		employee.setProcessedOrder(rs.getInt(COLUMN_PROCESSORDER));
 		System.out.println("employee recupere : " + employee);
 		return employee;
 	}

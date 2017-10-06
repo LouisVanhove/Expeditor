@@ -110,10 +110,6 @@ public class PDFUtils {
         int weightKg = boxWeight/1000 ;
         int weightG = boxWeight%1000;
         String display = String.valueOf(weightKg) + ","+String.valueOf(weightG)+" Kg";
-        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("POIDS COLIS : "+ display), 420, 670, 0);
-        
+        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("POIDS COLIS : "+ display), 420, 670, 0);   
     }
-    
-
-
 }

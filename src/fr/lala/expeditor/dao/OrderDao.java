@@ -40,7 +40,7 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	private static final String SEPARATOR = ",";
 	private static final String DATE_FORM = "dd/MM/yyyy HH:mm:ss";
 	private static final String REQ_SET_SHIPPING_CLERK = "UPDATE ORDERS SET id_employee = ? WHERE id=?";
-	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC";
+	private static final String REQ_GET_NEXT_ORDER = "SELECT TOP 1 * FROM ORDERS WHERE id_employee IS NULL ORDER BY order_date ASC, id ASC";
 	private static final String REQ_SET_PROCESSING_DATE = "UPDATE ORDERS SET treatment_date = ? WHERE id = ?";
 	private static final String REQ_UPDATE_ORDER_STATE="UPDATE ORDERS SET state=? WHERE id=?";
 	private static final String REQ_RESET_ORDER = "UPDATE ORDERS SET id_employee = NULL, state=1 WHERE id=?";
@@ -67,14 +67,14 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 			+ " VALUES(?, ?, ?)";
 	
 	private static final String SELECT_ALL = "SELECT * FROM ORDERS o"
-						+ " JOIN EMPLOYEES e ON e.id = o.id_employee"
-						+ " WHERE state=1";
+						+ " LEFT JOIN EMPLOYEES e ON e.id = o.id_employee"
+						+ " WHERE state=1 OR state=2 ORDER BY STATE DESC, order_date ASC, o.id ASC";
 
 
 
 
 	/**
-	 * Mï¿½thode en charge de rï¿½cupï¿½rer une liste de commandes
+	 * Méthode en charge de rï¿½cupï¿½rer une liste de commandes
 	 * depuis un fichier CSV.
 	 * @param File : fichier CSV
 	 * @return List<Order> : liste de commandes.
@@ -132,7 +132,6 @@ Logger logger = MonLogger.getLogger(this.getClass().getName());
 	public Order selectNextOrder(){
 		Order result = null ;
 		try (Connection cnx = ConnectionPool.getConnection()) {
-			System.out.println("Entrï¿½e dans le try de selectNextOrder");
 			PreparedStatement cmd = cnx.prepareStatement(REQ_GET_NEXT_ORDER);
 			ResultSet rs = cmd.executeQuery();
 			if (rs.next()) {
