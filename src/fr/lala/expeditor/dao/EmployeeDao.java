@@ -37,6 +37,9 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			+ " FROM EMPLOYEES e"
 			+ " WHERE e.archived=0";
 	
+	private static final String SELECT_ALL_EMPLOYEES_TOTAL = "SELECT e.id, e.login, e.password, e.name, e.firstname, e.profile, e.archived"
+			+ " FROM EMPLOYEES e";
+	
 	private static final String INSERT_EMPLOYEE = "INSERT INTO EMPLOYEES (login, password, name, firstname, profile, archived)"
 			+ " VALUES (?,?,?,?,?,0)";
 
@@ -90,7 +93,7 @@ public class EmployeeDao implements ICrudDao<Employee>{
 			stm.setString(2, data.getPassword());
 			stm.setString(3, data.getLastName());
 			stm.setString(4, data.getFirstName());
-			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 0));
+			stm.setInt(5, (data.getProfile() == Profile.MANAGER ? 1 : 2));
 			stm.setInt(6, data.getId());
 			stm.executeUpdate();			
 		} catch (SQLException e) {
@@ -158,6 +161,29 @@ public class EmployeeDao implements ICrudDao<Employee>{
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * Méthode retournant la liste des employés (préparateurs de commande et manager) 
+	 * actifs et inactifs.
+	 * @return liste d'employés actifs.
+	 */
+	public List<Employee> selectTotalEmployees() throws SQLException {
+		List<Employee> result = new ArrayList<>();
+		
+		try(Connection cnx = ConnectionPool.getConnection()){
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL_EMPLOYEES_TOTAL);
+			
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()){
+				result.add(itemBuilder(rs));
+			}
+		} catch (SQLException e) {
+			logger.severe("Erreur : " + e.getMessage());
+		}
+		return result;
+	}
+	
 	
 	/**
 	 * Méthode retournant la liste des employés (préparateurs de commande) 

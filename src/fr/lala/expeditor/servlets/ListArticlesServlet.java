@@ -33,7 +33,7 @@ public class ListArticlesServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArticleService articleService = new ArticleService();
-		
+		request.getSession(true).setAttribute("articleCurrent", null);
 		try {
 		   listarticles = articleService.selectAll();
 		   request.setAttribute("listarticles", listarticles);
