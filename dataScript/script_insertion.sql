@@ -11,16 +11,14 @@ INSERT INTO EMPLOYEES (login, password, name, firstname, profile, archived)
      
 
 INSERT INTO ARTICLES (label,description,weight,archived)
-     VALUES ('Disque dur interne 2,5', 'super qualité', 150 ,0);
+     VALUES ('Disque', 'super qualité', 150 ,0);
 INSERT INTO ARTICLES (label,description,weight,archived)
      VALUES ('Carte graphique','une résolution haute définition',100 ,0);
 INSERT INTO ARTICLES (label,description,weight,archived)
-     VALUES ('Carte mère','un vrai chef de projet',200 ,0);
+     VALUES ('Carte mere','un vrai chef de projet',200 ,0);
 INSERT INTO ARTICLES (label,description,weight,archived)
-     VALUES ('Alimentation','conseillé un ordinateur performant',300 ,0);
+     VALUES ('Alimentation','conseille un ordinateur performant',300 ,0);
 
 INSERT INTO STATES VALUES ('PENDING');
 INSERT INTO STATES VALUES ('IN_PROGRESS');
 INSERT INTO STATES VALUES ('PROCESSED');
-
-
