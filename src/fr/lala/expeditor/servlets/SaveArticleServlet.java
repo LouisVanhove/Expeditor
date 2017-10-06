@@ -19,6 +19,7 @@ public class SaveArticleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleService articleservice = new ArticleService();
 	private String view;
+	private int poidsRecupere;
 	private Map<String, String> erreurs = new HashMap<String, String>();
 	public static final String FIELD_ID_ARTICLE = "id_article";
 	public static final String FIELD_LABEL_ARTICLE = "txtboxLabel";
@@ -51,7 +52,11 @@ public class SaveArticleServlet extends HttpServlet {
 				String idRecupere = request.getParameter(FIELD_ID_ARTICLE);
 				String labelRecupere = request.getParameter(FIELD_LABEL_ARTICLE).trim();
 				String descriptionRecupere = request.getParameter(FIELD_DESCRIPTION_ARTICLE).trim();
-				int poidsRecupere = Integer.parseInt(request.getParameter(FIELD_WEIGHT_ARTICLE).trim());
+				try {
+				poidsRecupere = Integer.parseInt(request.getParameter(FIELD_WEIGHT_ARTICLE).trim());
+				} catch (NumberFormatException nfe) {
+					erreurs.put("weight", "Le poids doit être un chiffre.");
+				}
 				
 				erreurs = validerleschamps(labelRecupere, descriptionRecupere, poidsRecupere);
 				
@@ -72,6 +77,7 @@ public class SaveArticleServlet extends HttpServlet {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
+					
 					request.setAttribute("message", "La modification s'est déroulée avec succès");
 					}
 				}else{

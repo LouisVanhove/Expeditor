@@ -3,13 +3,10 @@ package fr.lala.expeditor.utils;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -22,7 +19,7 @@ import fr.lala.expeditor.models.Order;
 
 public class PDFUtils {
 	static Document document ;
-    static int boxWeight = 0 ;
+    
     static String codeString;
 	
     public static String createDeliveryNote(Order order, String realPath) throws IOException, DocumentException {
@@ -90,6 +87,7 @@ public class PDFUtils {
      */
     public static void setOrderDetail(Order data, PdfContentByte canvas){
     	int i = 630 ;
+    	int boxWeight = 0 ;
     	//En tete
     	ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("REF"), 50, i, 0);
         ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("DESIGNATION"), 150, i, 0);

@@ -1,15 +1,17 @@
 package fr.lala.expeditor.servlets;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import fr.lala.expeditor.dao.EmployeeDao;
 import fr.lala.expeditor.models.Employee;
 import fr.lala.expeditor.models.enums.Profile;
 import fr.lala.expeditor.services.EmployeeService;
@@ -20,7 +22,6 @@ import fr.lala.expeditor.utils.HashageSalagePassword;
  */
 public class SaveEmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private EmployeeDao employeeDao = new EmployeeDao();
 	private EmployeeService serviceE = new EmployeeService();
 	private Map<String, String> errors = new HashMap<String, String>();
 
@@ -47,30 +48,31 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		HttpSession session = request.getSession(true);
 		// Si l'action est Enregistrer:
 		if (request.getParameter("save") != null) {
 			// Validation des valeurs du formulaire:
 			String idEmploye = request.getParameter("id_employee");
-			System.out.println(idEmploye);
 			String enteredLogin = request.getParameter("txtboxLogin").trim();
 			String enteredPassword = request.getParameter("txtboxPassword").trim();
+			String enteredPasswordConfirm = request.getParameter("txtboxPasswordConfirm").trim();
 			String enteredLastName = request.getParameter("txtboxLastName").trim();
 			String enteredFirstName = request.getParameter("txtboxFirstName").trim();
-			errors = validateFields(enteredPassword, enteredLastName, enteredFirstName);
-			System.out.println(errors.toString());
+			
+			Employee employeeToSave = buildEmployee(request);
+			request.setAttribute("currentEmployee", employeeToSave);
+			
+			errors = validateFields(enteredLogin, enteredPassword, enteredPasswordConfirm, enteredLastName, enteredFirstName);
+			if ("".equals(idEmploye)) {
+				validateLoginUnique(enteredLogin, (List<Employee>)session.getAttribute("listEmployees")); 
+			}
 			// Si le Map d'erreurs est vide (donc champs valides)
 			if (errors.isEmpty()) {
 				// Si l'id est vide (donc employé inexistant en BDD), on le crée:
 				if ("".equals(idEmploye)) {
+					//validateLoginUnique(enteredLogin, (List<Employee>)session.getAttribute("listEmployees")); 
 					try {
-						try {
-							validateLogin(enteredLogin);
-						} catch (Exception e) {
-							errors.put("Identifiant", e.getMessage());
-						}
-						System.out.println("je rentre dans l'ajout");
-						serviceE.insert(buildEmployee(request));
+						serviceE.insert(employeeToSave);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -78,13 +80,9 @@ public class SaveEmployeeServlet extends HttpServlet {
 					// Sinon, on modifie l'employé en BDD:
 				} else {
 					try {
-						System.out.println("je rentre dans la modif");
 						Employee employeeToModify = buildEmployee(request);
-						System.out.println(employeeToModify);
 						employeeToModify.setId(Integer.parseInt(idEmploye));
-						System.out.println(employeeToModify.getId());
 						serviceE.update(employeeToModify);
-						System.out.println(employeeToModify);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -94,36 +92,27 @@ public class SaveEmployeeServlet extends HttpServlet {
 			} else {
 				request.setAttribute("errors", errors);
 				request.getRequestDispatcher("/WEB-INF/jsp/manager/formaddmodifyemployee.jsp").forward(request, response);;
-			}
-			
+			}			
 		}
 	}
 
 	/**
-	 * Méthode de construction d'un objet Employé à partir des données du
-	 * formulaire.
-	 * 
+	 * Méthode de construction d'un objet Employé à partir des données du formulaire.
 	 * @param request
 	 * @return
 	 */
 	private Employee buildEmployee(HttpServletRequest request) {
 		Employee employee = new Employee();
 		employee.setLogin(request.getParameter("txtboxLogin").trim());
-		System.out.println(employee.getLogin());
 		employee.setPassword(HashageSalagePassword.encryptPassword(request.getParameter("txtboxPassword").trim()));
-		System.out.println(employee.getPassword());
 		employee.setLastName(request.getParameter("txtboxLastName").trim());
-		System.out.println(employee.getLastName());
 		employee.setFirstName(request.getParameter("txtboxFirstName").trim());
-		System.out.println(employee.getFirstName());
 		employee.setProfile(buildProfile(request));
-		System.out.println(employee.getPassword().toString());
 		return employee;
 	}
 
 	/**
 	 * Méthode en charge de récupérer le profil de l'employé
-	 * 
 	 * @param id_profile
 	 * @return
 	 */
@@ -132,21 +121,41 @@ public class SaveEmployeeServlet extends HttpServlet {
 		return profile;
 	}
 
-	private Map<String, String> validateFields(String password, String lastName, String firstName) {
+	/**
+	 * Méthode pour valider les champs identifiant, mot de passe, ot de passe confirm, nom et prenom.
+	 * @param login
+	 * @param password
+	 * @param passwordConfirm
+	 * @param lastName
+	 * @param firstName
+	 * @param enteredFirstName 
+	 * @return
+	 */
+	private Map<String, String> validateFields(String login, String password, String passwordConfirm, String lastName, String firstName) {
+		try {
+			validateLogin(login);
+		} catch (Exception e) {
+			errors.put("login", e.getMessage());
+		}
 		try {
 			validatePassword(password);
 		} catch (Exception e) {
-			errors.put("Password", e.getMessage());
+			errors.put("password", e.getMessage());
+		}
+		try{
+			validatePasswordConfirm(password, passwordConfirm);
+		}catch (Exception e){
+			errors.put("passwordConfirm", e.getMessage());
 		}
 		try {
 			validateLastName(lastName);
 		} catch (Exception e) {
-			errors.put("Nom", e.getMessage());
+			errors.put("lastName", e.getMessage());
 		}
 		try {
 			validateFirstName(firstName);
 		} catch (Exception e) {
-			errors.put("Prénom", e.getMessage());
+			errors.put("firstName", e.getMessage());
 		}
 		return errors;
 	}
@@ -157,11 +166,6 @@ public class SaveEmployeeServlet extends HttpServlet {
 	 * @throws Exception
 	 */
 	private void validateLogin(String login) throws Exception {
-		for (Employee employee : employeeDao.selectAll()) {
-			if (login.equals(employee.getLogin())) {
-				throw new Exception("Cet identifiant est déjà utilisé, merci d'en choisir un nouveau.");
-			}
-		} 
 		if (login == null || login.trim().length() == 0) {
 			throw new Exception("Merci de saisir un identifiant.");
 		} else if(login.trim().length()<1 || login.trim().length()>30){
@@ -183,7 +187,19 @@ public class SaveEmployeeServlet extends HttpServlet {
 			throw new Exception("Merci de saisir un mot de passe.");
 		}
 	}
-
+	
+	/**
+	 * Valide que le 2eme mot de passe est égal au 1er
+	 * @param passwordConfirm
+	 * @throws Exception 
+	 */
+	private void validatePasswordConfirm(String password, String passwordConfirm) throws Exception {
+		if(!passwordConfirm.equals(password)){
+			System.out.println("erreur confirm mdp");
+			throw new Exception("Le mot de passe est différent.");
+		}		
+	}
+	
 	/**
 	 * Valide le prénom saisi dans le formulaire.
 	 */
@@ -201,5 +217,23 @@ public class SaveEmployeeServlet extends HttpServlet {
 		} else if(lastName.trim().length()<1 || lastName.trim().length()>100){
 			throw new Exception("Le nom doit être compris entre 1 et 100 caractères");
 		}
+	}
+	
+	/**
+	 * Valide l'unicité de l'identifiant pour la création d'un nouvel employé.
+	 * @param enteredLogin
+	 * @throws SQLException
+	 */
+	private Map<String, String> validateLoginUnique(String enteredLogin, List<Employee> listEmployees) {
+			try{
+				for(Employee employee : listEmployees){
+					if (enteredLogin.equals(employee.getLogin())) {
+						throw new Exception("Cet identifiant existe déjà");
+					}
+				}
+			}catch (Exception e){
+				errors.put("login", "Cet identifiant existe déjà");
+			}
+			return errors;
 	}
 }
