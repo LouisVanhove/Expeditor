@@ -35,6 +35,7 @@ public class Employee implements Serializable {
 	 */
 	public Employee() {
 		super();
+		setProcessedOrder(0);
 	}
 
 	/**
@@ -46,7 +47,7 @@ public class Employee implements Serializable {
 	 * @param firstName
 	 */
 	public Employee(int id, String login, String password, String lastName, String firstName, Profile profile) {
-		super();
+		this();
 		this.setId(id);
 		this.setLogin(login);
 		this.setPassword(password);
