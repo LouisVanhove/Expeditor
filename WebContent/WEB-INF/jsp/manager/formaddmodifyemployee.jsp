@@ -23,6 +23,9 @@
 							<label id="password">Mot de passe :</label> 
 							<span class="message">${errors['password']}</span> 
 							<input type="password" id="txtboxPassword" name="txtboxPassword" size="100" class="form-control" value="${requestScope.currentEmployee.password}" required /><br>
+							<label id="passwordConfirm">Confirmer le mot de passe :</label> 
+							<span class="message">${errors['passwordConfirm']}</span> 
+							<input type="password" id="txtboxPasswordConfirm" name="txtboxPasswordConfirm" size="100" class="form-control" value="" required /><br>
 							<label id="lastName">Nom :</label> 
 							<span class="message">${errors['lastName']}</span>
 							<input type="text" id="txtboxLastName" name="txtboxLastName" size="100" class="form-control" value="${requestScope.currentEmployee.lastName}" required /><br>
@@ -31,7 +34,7 @@
 							<input type="text" id="txtboxFirstName" name="txtboxFirstName" size="100" class="form-control" value="${requestScope.currentEmployee.firstName}" required /><br>
 							<label id="profile">Poste :</label><br> 
 							<select class="form-control" name="selectProfile" required>
-								<c:forEach items="${requestScope.profiles}" var="profile">
+								<c:forEach items="${sessionScope.profiles}" var="profile">
 									<option value="${profile.getId()}"
 										<c:if test="${profile.equals(currentEmployee.profile)}"> selected</c:if>>
 										${profile.toString()}</option>

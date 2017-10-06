@@ -30,8 +30,7 @@ public class EmployeeService implements ICrudServices<Employee>{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return employee;
-		
+		return employee;		
 	}
 
 	/**
@@ -64,6 +63,14 @@ public class EmployeeService implements ICrudServices<Employee>{
 	@Override
 	public List<Employee> selectAll() throws Exception {
 		List<Employee> result = employeedao.selectAll();
+		return result;
+	}
+	
+	/**
+	 * Méthode pour afficher l'ensemble des employés non archivés et archivés.
+	 */
+	public List<Employee> selectTotalEmployees() throws Exception {
+		List<Employee> result = employeedao.selectTotalEmployees();
 		return result;
 	}
 	
