@@ -76,7 +76,6 @@ public class Employee implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		//this.password = HashageSalagePassword.encryptPassword(password);
 		this.password = password;
 	}
 
