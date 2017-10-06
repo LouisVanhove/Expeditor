@@ -6,7 +6,7 @@ html, hmtl a{
 	-ms-text-size-adjust: 100%;
 }
 
-html, body {
+body {
 	background: #ffffff;
 	width: 100%;
 	padding: 0;
@@ -206,8 +206,9 @@ nav#menu #menu-nav li a:hover {
    section
 ================================================== */
 .section{
-	min-height:400px;
 	font-family: 'Titillium Web', sans-serif;
+	   min-height: 100%;
+
 }
 
 
@@ -218,11 +219,12 @@ footer {
 	margin-top : 50px ;
 	padding: 10px 0;
 	background-color: #000000;
-	color: white;
-	bottom: 0;
 	text-align: left;
 	color: white;
 	font-size: 14px;
+	height: 50px;
+  	bottom: 0;
+  	width: 100%;
 }
 
 .copyright{
